@@ -7,7 +7,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.booktheticket.userms.domain.model.ApiStatus;
 import com.booktheticket.userms.domain.model.UserCredentialsDto;
 import com.booktheticket.userms.domain.model.UserDetailsDto;
 import com.booktheticket.userms.domain.model.UserDto;
@@ -35,28 +35,19 @@ import com.booktheticket.userms.service.UserService;
 //@Api("This is the Api to manage user information.")
 public class UserRestController {
 		
-	public class ApiStatus{
-		
-		private int status;
-
-		public int getStatus() {
-			return status;
-		}
-
-		public void setStatus(int status) {
-			this.status = status;
-		}
-		
-	}
+	
 	@Autowired
 	private UserService service;
+	
+	@Autowired
+	private ApiStatus status;
 
 	private Function<BindingResult, String> getValdaitionErrorMessage = error -> error.getAllErrors().stream()
 			.map(ObjectError::getDefaultMessage).collect(Collectors.joining(","));
 
 	@PostMapping
 	//@ApiOperation("Add a new User.")
-	public String addUser(@Valid @RequestBody UserDto userDetails, BindingResult beanValidationResults)
+	public ApiStatus addUser(@Valid @RequestBody UserDto userDetails, BindingResult beanValidationResults)
 			throws UserValidationError, UserAlreadyExistException {
 
 		if (beanValidationResults.hasErrors()) {
@@ -70,7 +61,7 @@ public class UserRestController {
 
 	@PostMapping(path = "/validate", consumes = MediaType.APPLICATION_JSON_VALUE)
 	//@ApiOperation("Validate the user credentials.")
-	public ResponseEntity<ApiStatus> validateUserCredentails(@Valid @RequestBody UserCredentialsDto userCredentials,
+	public ApiStatus validateUserCredentails(@Valid @RequestBody UserCredentialsDto userCredentials,
 			BindingResult beanValidationResults) throws UserValidationError, UserNotFoundException, PasswordNotMatchException, InvalidRoleException {
 
 		if (beanValidationResults.hasErrors()) {
@@ -78,9 +69,8 @@ public class UserRestController {
 		}
 
 		service.validateUser(userCredentials);
-		ApiStatus apiStatus = new ApiStatus();
-		apiStatus.setStatus(200);
-		return ResponseEntity.ok(apiStatus);
+		status.setStatus(200);
+		return status;
 	}
 	
 	@GetMapping(path="/emailId/{emailId}")

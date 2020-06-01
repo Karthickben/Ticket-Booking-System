@@ -9,10 +9,10 @@ import java.util.function.Supplier;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.booktheticket.userms.domain.entity.User;
+import com.booktheticket.userms.domain.model.ApiStatus;
 import com.booktheticket.userms.domain.model.UserCredentialsDto;
 import com.booktheticket.userms.domain.model.UserDetailsDto;
 import com.booktheticket.userms.domain.model.UserDto;
@@ -31,13 +31,16 @@ public class UserServiceV1 implements UserService {
 	@Autowired
 	private ModelMapper modelMapper;
 	
+	@Autowired
+	private ApiStatus status;
+	
 	
 	private Function<UserDto,User> convertToEntity = dto ->  modelMapper.map(dto, User.class);
 	private Function<User,UserDetailsDto> convertToDto = entity ->  modelMapper.map(entity, UserDetailsDto.class);
 	private Supplier<UserNotFoundException> userNotFound = () -> new UserNotFoundException("Invalid User Id");
 
 	@Override
-	public String registerUser(UserDto userDetails) throws UserAlreadyExistException {
+	public ApiStatus registerUser(UserDto userDetails) throws UserAlreadyExistException {
 		
 		Optional<User> checkUser = repo.findById(userDetails.getEmailId());
 		System.out.println("--------------------------------------------------");
@@ -49,12 +52,12 @@ public class UserServiceV1 implements UserService {
 		user.setRole("User");
 		user.setLastUpdatedTimestamp(LocalDateTime.now());	
 		repo.save(user);
-		 
-		return "Success";
+		status.setStatus(200);
+		return  status;
 	}
 
 	@Override
-	public String validateUser(UserCredentialsDto userCredentials) throws UserNotFoundException, PasswordNotMatchException, InvalidRoleException {
+	public ApiStatus validateUser(UserCredentialsDto userCredentials) throws UserNotFoundException, PasswordNotMatchException, InvalidRoleException {
 		
 		 	User user = repo.findById(userCredentials.getEmailId()).orElseThrow(userNotFound);
 		 	
@@ -68,8 +71,8 @@ public class UserServiceV1 implements UserService {
 		 		}
 		 	
 		 	
-	
-		return "valid";
+		 		status.setStatus(200);
+		return status;
 	}
 
 	@Override

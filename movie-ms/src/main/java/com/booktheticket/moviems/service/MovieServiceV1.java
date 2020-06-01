@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.booktheticket.moviems.domain.entity.Movie;
+import com.booktheticket.moviems.domain.model.ApiStatus;
 import com.booktheticket.moviems.domain.model.MovieDetailsDto;
 import com.booktheticket.moviems.domain.model.MovieInboundDto;
 import com.booktheticket.moviems.domain.model.MovieListDto;
@@ -25,19 +26,23 @@ public class MovieServiceV1 implements MovieService {
 
 	@Autowired
 	private ModelMapper mapper;
+	
+	@Autowired
+	private ApiStatus status;
 
 	private Function<MovieInboundDto, Movie> convertToEntity = dto -> mapper.map(dto, Movie.class);
 	private Function<Movie, MovieDetailsDto> convertToDetailsDto = entity -> mapper.map(entity, MovieDetailsDto.class);
 	private Supplier<MovieNotFoundException> movieNotFound = () -> new MovieNotFoundException("Movie(s) not found");
 
 	@Override
-	public String addMovie(MovieInboundDto movieDetails) {
+	public ApiStatus addMovie(MovieInboundDto movieDetails) {
 		Movie movie = convertToEntity.apply(movieDetails);
 		movie.setLastUpdatedTimestamp(LocalDateTime.now());
 		movie.setRating(0.0);
 		movie.setNumberOfRatings(0);
 		repo.save(movie);
-		return "success";
+		status.setStatus(200);
+		return status;
 
 	}
 
@@ -75,7 +80,7 @@ public class MovieServiceV1 implements MovieService {
 	}
 
 	@Override
-	public String updateMovieDetails(int movieId, MovieInboundDto movieDetails) throws MovieNotFoundException {
+	public ApiStatus updateMovieDetails(int movieId, MovieInboundDto movieDetails) throws MovieNotFoundException {
 
 		repo.findById(movieId).orElseThrow(movieNotFound);
 
@@ -83,11 +88,12 @@ public class MovieServiceV1 implements MovieService {
 		movie.setMovieId(movieId);
 		movie.setLastUpdatedTimestamp(LocalDateTime.now());
 		repo.save(movie);
-		return "success";
+		status.setStatus(200);
+		return status;
 	}
 
 	@Override
-	public String rateMovie(int movieId, double rateing) throws MovieNotFoundException {
+	public ApiStatus rateMovie(int movieId, double rateing) throws MovieNotFoundException {
 		Movie movie2 = repo.findById(movieId).orElseThrow(movieNotFound);
 
 		double newRating = 0;
@@ -97,15 +103,17 @@ public class MovieServiceV1 implements MovieService {
 		movie2.setRating(newRating);
 		movie2.setNumberOfRatings(numOfRatings + 1);
 		repo.save(movie2);
-		return "success";
+		status.setStatus(200);
+		return status;
 
 	}
 
 	@Override
-	public String deleteMovie(int movieId) throws MovieNotFoundException {
+	public ApiStatus deleteMovie(int movieId) throws MovieNotFoundException {
 		Movie movie = repo.findById(movieId).orElseThrow(movieNotFound);
 		repo.delete(movie);
-		return "Success";
+		status.setStatus(200);
+		return status;
 
 	}
 

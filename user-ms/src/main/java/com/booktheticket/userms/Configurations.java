@@ -5,6 +5,8 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.booktheticket.userms.domain.model.ApiStatus;
+
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
@@ -30,6 +32,11 @@ public class Configurations {
 				.build().useDefaultResponseMessages(false); //For disabling default response messages
 	}
 	
+	
+	@Bean
+	public ApiStatus apiStatus() {
+		return new ApiStatus();
+	}
 	
 
 }

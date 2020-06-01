@@ -18,17 +18,21 @@ public class RestExceptionHandler {
 		ExceptionMessage errorMessage = new ExceptionMessage();
 		errorMessage.setErrorDescription(ex.getMessage());
 		errorMessage.setLocalDateTime(LocalDateTime.now());
+		HttpStatus status;
 		if(ex instanceof MovieNotFoundException) {
 				errorMessage.setErrorSatatus(HttpStatus.NOT_FOUND.value());
 			   errorMessage.setErrorMessage(HttpStatus.NOT_FOUND.toString());
+			   status=HttpStatus.NOT_FOUND;
+			   
 			 
 		}else {
 			 	errorMessage.setErrorSatatus(HttpStatus.BAD_REQUEST.value());
 			   errorMessage.setErrorMessage(HttpStatus.BAD_REQUEST.toString());
+			   status=HttpStatus.NOT_FOUND;
 			   
 		}
 		
-		return ResponseEntity.ok(errorMessage);
+		return new ResponseEntity<>(errorMessage, status);
 		
 	}
 

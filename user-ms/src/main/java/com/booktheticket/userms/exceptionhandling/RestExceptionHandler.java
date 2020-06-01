@@ -47,7 +47,7 @@ public class RestExceptionHandler {
 		}
 		
 		
-		return new ResponseEntity<ExceptionMessage>(errorMessage, status);
+		return new ResponseEntity<>(errorMessage, status);
 		
 		
 	}
