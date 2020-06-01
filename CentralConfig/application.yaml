@@ -1,0 +1,20 @@
+server:
+  port: 0
+  
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+      
+  datasource:
+    username: postgres
+    password: admin
+    
+eureka:
+  client:
+    service-url:
+      defaultZone:
+        http://localhost:5555/eureka/
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
