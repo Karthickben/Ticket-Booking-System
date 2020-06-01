@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: Eureka-Server
+server:  port: 5555
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:      deafultMapping: http://localhost:5555/eureka
