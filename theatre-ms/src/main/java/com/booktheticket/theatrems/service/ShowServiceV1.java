@@ -117,8 +117,10 @@ public class ShowServiceV1 {
 		sRepo.findById(screenId).orElseThrow(screenNotFound);
 		String movieuri = "http://MOVIEMS/movie-ms/v1/movie/id/" + show.getMovieId() + "/getdetails";
 		ResponseEntity<MovieDetailsDto> movie = client.getForEntity(movieuri, MovieDetailsDto.class);
+		
 		HttpStatus statusCode = movie.getStatusCode();
-		if (statusCode!= HttpStatus.OK) {
+		System.out.println(statusCode);
+		if (HttpStatus.OK!=statusCode) {
 			throw new MovieNotFoundException("Movie not found");
 		}
 

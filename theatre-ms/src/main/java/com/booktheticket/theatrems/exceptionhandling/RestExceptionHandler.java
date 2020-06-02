@@ -12,7 +12,7 @@ public class RestExceptionHandler {
 
 	@ExceptionHandler({ TheatreNotFoundException.class, TheatreValidationException.class, ScreenNotFoundException.class,
 			ScreenValidationException.class, ShowNotFoundException.class, ShowValidationException.class,
-			ShowTimeValidationException.class, ShowTimeNotFoundException.class })
+			ShowTimeValidationException.class, ShowTimeNotFoundException.class,MovieNotFoundException.class })
 	public ResponseEntity<ExceptionMessage> handleUserExceptions(Exception ex) {
 
 		ExceptionMessage errorMessage = new ExceptionMessage();
