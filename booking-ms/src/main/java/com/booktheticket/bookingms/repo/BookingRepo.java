@@ -12,4 +12,6 @@ public interface BookingRepo extends JpaRepository<Booking, Integer>{
 
 	List<Booking> findByShowTimeId(int showId);
 
+	List<Booking> findBYShowDateBetweenAndTheatrAddress(String fromDate, String toDate, String location);
+
 }

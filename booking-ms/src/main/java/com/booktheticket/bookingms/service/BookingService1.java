@@ -20,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 import com.booktheticket.bookingms.domain.entity.Booking;
 import com.booktheticket.bookingms.domain.model.ApiStatus;
 import com.booktheticket.bookingms.domain.model.BookingInDto;
+import com.booktheticket.bookingms.domain.model.BookingReportDto;
 import com.booktheticket.bookingms.domain.model.ScreenSeatingDetailsOut;
 import com.booktheticket.bookingms.domain.model.SeatingChartOutDto;
 import com.booktheticket.bookingms.domain.model.SeatingoutDto;
@@ -99,7 +100,6 @@ public class BookingService1 {
 		List<SeatingoutDto> lisLtOfSeats = new ArrayList<>();
 		int seatNumbering = 'A' + seatingDetails.getBody().getNoOfSeatingRows();
 
-
 		for (char alpha = 'A'; alpha <= seatNumbering; alpha++) {
 			for (int i = 1; i <= seatingDetails.getBody().getNoOfSeatingColumns(); i++) {
 				String seatNum = alpha + "" + i;
@@ -138,7 +138,7 @@ public class BookingService1 {
 		ticket.setShowDate(booking.getShowDate().toString());
 		ticket.setShowTime(booking.getShowTime().toString());
 		ticket.setStatus(booking.getTicketStatus());
-		ticket.setTheatrAddress(theatreDetails.getArea() + ", " + theatreDetails.getCity() + ".");
+		ticket.setTheatrAddress(theatreDetails.getCity());
 		ticket.setTheatreName(theatreDetails.getTheatreName());
 		ticket.setTicketPrice(booking.getTicketPrice());
 		ticket.setTotalPrice(booking.getTotalPrice());
@@ -175,6 +175,22 @@ public class BookingService1 {
 
 		return theatreDetails.getBody();
 
+	}
+
+	public BookingReportDto genReports(String location, String fromDate, String toDate)
+			throws BookingNotFound, ScreenNotFound, TheatreNotFound {
+
+		List<Booking> listOfBooking = repo.findBYShowDateBetweenAndTheatrAddress(fromDate, toDate, location);
+
+		List<TicketDto> listOfBookingDetails = new ArrayList<>();
+
+		for (Booking book : listOfBooking) {
+			listOfBookingDetails.add(genTicket(book.getBookingId()));
+		}
+
+		BookingReportDto report = new BookingReportDto();
+		report.setListOfBookingDetails(listOfBookingDetails);
+		return report;
 	}
 
 }

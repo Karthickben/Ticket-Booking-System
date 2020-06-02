@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.booktheticket.bookingms.domain.model.ApiStatus;
 import com.booktheticket.bookingms.domain.model.BookingInDto;
+import com.booktheticket.bookingms.domain.model.BookingReportDto;
 import com.booktheticket.bookingms.domain.model.SeatingChartOutDto;
 import com.booktheticket.bookingms.domain.model.TicketDto;
 import com.booktheticket.bookingms.exceptionhandling.BookingNotFound;
@@ -65,6 +66,15 @@ public class BookingRestController {
 	public TicketDto generateTicket(@PathVariable("bookingId") int bookingId)
 			throws BookingNotFound, ScreenNotFound, TheatreNotFound {
 		return service.genTicket(bookingId);
+	}
+	
+	@GetMapping("/book/bookingreport/{location}/{fromDate}/{toDate}/genreport")
+	public BookingReportDto genReports(@PathVariable("location") String location, @PathVariable("fromDate") String fromDate, 
+			@PathVariable("toDate") String toDate)
+	
+			throws BookingNotFound, ScreenNotFound, TheatreNotFound {
+		
+		return service.genReports(location, fromDate, toDate);
 	}
 
 }
