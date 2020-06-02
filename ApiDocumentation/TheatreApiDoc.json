@@ -1,0 +1,897 @@
+swagger: "2.0"
+info:
+  description: "This is an Api documentation for Theatre Micro Service."
+  version: "1.0.0"
+  title: "Theatre Micro Service"
+  contact:
+    email: "karthick@gmail.com"
+ 
+host: "hostname"
+basePath: "/theatre-ms/v1"
+tags:
+- name: "Theatre"
+  description: "Methods to manipulate the Theatre resources."
+schemes:
+- "http"
+paths:
+  /theatre:
+    post:
+      tags:
+      - "Theatre"
+      summary: "Add a new theatre."
+      description: "Only Admin has the access to add a new Theatre."
+      operationId: "addTheatre"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Theatre Details"
+        required: true
+        schema:
+          $ref: "#/definitions/Theatre_Inbound1"
+      responses:
+        "405":
+          description: "Bad Request"
+          schema:
+            $ref: '#/definitions/ExceptionMessage'
+        "200":
+          description: "ok"
+          schema:
+            $ref: '#/definitions/ApiStatus'
+  
+  /theatre-screen/{theatreId}/screen:
+    post:
+      tags:
+      - "Theatre"
+      summary: "Add a screen to the existing theatre."
+      description: "Only Admin has the access to add screens."
+      operationId: "addScreen"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Screen Details"
+        required: true
+        schema:
+          $ref: "#/definitions/Screen_Inbound"
+      - name: "theatreId"
+        type: "integer"
+        in: "path"
+        description: "Screen ID"
+        required: true
+      responses:
+        "405":
+          description: "Bad Request"
+          schema: 
+            $ref: '#/definitions/ExceptionMessage'
+        "200":
+          description: "ok"
+          schema:
+            $ref: '#/definitions/ApiStatus'
+      
+  /theatre-show/{theatreId}/screen/{screenId}/show:
+    post:
+      tags:
+      - "Theatre"
+      summary: "Add a show to the screen."
+      description: "Only Admin has the access to add shows."
+      operationId: "addShowstOScreen"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Show Details"
+        required: true
+        schema:
+          $ref: "#/definitions/showInbound"
+      - name: "theatreId"
+        type: "integer"
+        in: "path"
+        description: "Theatre ID"
+        required: true
+      - name: "screenId"
+        type: "integer"
+        in: "path"
+        description: "Screen ID"
+        required: true
+      responses:
+        "405":
+          description: "Bad Request"
+          schema:
+            $ref: '#/definitions/ExceptionMessage'
+        "200":
+          description: "ok"
+          schema:
+            $ref: '#/definitions/ApiStatus'
+          
+  /theatre-showTime/{theatreId}/screen/{screenId}/show/{showId}/showtime:
+    post:
+      tags:
+      - "Theatre"
+      summary: "add a show time to the screen."
+      description: "Only Admin has the access to add show timings."
+      operationId: "addShowTimeToScreen"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Movie Details"
+        required: true
+        schema:
+          $ref: "#/definitions/showTimeInbound"
+      - name: "theatreId"
+        type: "integer"
+        in: "path"
+        description: "Theatre ID"
+        required: true
+      - name: "screenId"
+        type: "integer"
+        in: "path"
+        description: "Screen ID"
+        required: true
+      - name: "showId"
+        type: "integer"
+        in: "path"
+        description: "Show ID"
+        required: true
+      responses:
+        "405":
+          description: "Bad Request"
+          schema:
+            $ref: '#/definitions/ExceptionMessage'
+        "200":
+          description: "ok"
+          schema:
+            $ref: '#/definitions/ApiStatus'
+        
+  /theatre/getdetails:        
+    get:
+      tags:
+      - "Theatre"
+      summary: "Get the list of Theatres"
+      description: ""
+      operationId: "getTheatreList"
+      produces:
+      - "application/json"
+      responses:
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: '#/definitions/ExceptionMessage'
+        "200":
+          description: "ok"
+          schema:
+            $ref: "#/definitions/Theatre_Outbound1"
+            
+  /theatre/{theatreId}/getdetails:        
+    get:
+      tags:
+      - "Theatre"
+      summary: "Get the details of Theatres for the given theatre Id"
+      description: ""
+      operationId: "getTheatreDetailsById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "theatreId"
+        type: "integer"
+        in: "path"
+        description: "Theatre ID"
+        required: true
+      responses:
+        "405":
+          description: "Invalid input"
+        "200":
+          description: "ok"
+          schema:
+            $ref: "#/definitions/Theatre_Outbound2"
+            
+  
+  /theatre/getdetails/{theatreName}:        
+    get:
+      tags:
+      - "Theatre"
+      summary: "Get the list of Theatres by Name"
+      description: ""
+      operationId: "getTheatreListbyName"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "theatreName"
+        type: "string"
+        in: "path"
+        description: "Theatre Name"
+        required: true
+      responses:
+        "405":
+          description: "Invalid input"
+        "200":
+          description: "ok"
+          schema:
+            $ref: "#/definitions/Theatre_Outbound1"
+            
+  /theatre/movie/{movieName}/location/{location}/getDetails:        
+    get:
+      tags:
+      - "Theatre"
+      summary: "Get the list of Theatres based on the Movie name and location."
+      description: ""
+      operationId: "getTheatreListbyMovie"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "movieName"
+        type: "string"
+        in: "path"
+        description: "Movie Name"
+        required: true
+      - name: "location"
+        type: "string"
+        in: "path"
+        description: "location"
+        required: true
+      responses:
+        "405":
+          description: "Invalid input"
+        "200":
+          description: "ok"
+          schema:
+            $ref: "#/definitions/Theatre_Outbound3"
+            
+  /theatre/{theatreId}:        
+    put:
+      tags:
+      - "Theatre"
+      summary: "Update the theatre details"
+      description: ""
+      operationId: "updateTheTheatreDetails"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "theatreId"
+        type: "integer"
+        in: "path"
+        description: "Theatre Id"
+        required: true
+      - in: "body"
+        name: "body"
+        description: "Theatre details"
+        required: true
+        schema:
+          $ref: "#/definitions/Theatre_Inbound1"
+      responses:
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: '#/definitions/ExceptionMessage'
+        "200":
+          description: "ok"
+          schema:
+            $ref: '#/definitions/ApiStatus'
+          
+  /theatre-screen/{theatreId}/screen/{screenId}:        
+    put:
+      tags:
+      - "Theatre"
+      summary: "Update the screen details"
+      description: ""
+      operationId: "updateTheScreenDetails"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "theatreId"
+        type: "integer"
+        in: "path"
+        description: "Theatre Id"
+        required: true
+      - name: "screenId"
+        type: "integer"
+        in: "path"
+        description: "Screen Id"
+        required: true
+      - in: "body"
+        name: "body"
+        description: "Screen Details"
+        required: true
+        schema:
+          $ref: "#/definitions/Screen_Inbound"
+      responses:
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: '#/definitions/ExceptionMessage'
+        "200":
+          description: "updated sucessfully"
+          schema:
+            $ref: '#/definitions/ApiStatus'
+          
+  /theatre-show/{theatreId}/screen/{screenId}/show/{showId}:        
+    put:
+      tags:
+      - "Theatre"
+      summary: "Update the show details"
+      description: ""
+      operationId: "updateTheShowDetails"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "theatreId"
+        type: "integer"
+        in: "path"
+        description: "Theatre Id"
+        required: true
+      - name: "screenId"
+        type: "integer"
+        in: "path"
+        description: "Screen Id"
+        required: true
+      - name: "showId"
+        type: "integer"
+        in: "path"
+        description: "Show Id"
+        required: true
+      - in: "body"
+        name: "body"
+        description: "Show Details"
+        required: true
+        schema:
+          $ref: "#/definitions/showInbound"
+      responses:
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: '#/definitions/ExceptionMessage'
+        "200":
+          description: "ok"
+          schema:
+            $ref: '#/definitions/ApiStatus'
+          
+  /theatre-showTime/{theatreId}/screen/{screenId}/show/{showId}/showTime/{ShowTimeId}:        
+    put:
+      tags:
+      - "Theatre"
+      summary: "Update the show Time details"
+      description: ""
+      operationId: "updateTheShowTimeDetails"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "theatreId"
+        type: "integer"
+        in: "path"
+        description: "Theatre Id"
+        required: true
+      - name: "screenId"
+        type: "integer"
+        in: "path"
+        description: "Screen Id"
+        required: true
+      - name: "showId"
+        type: "integer"
+        in: "path"
+        description: "Show Id"
+        required: true
+      - name: "ShowTimeId"
+        type: "integer"
+        in: "path"
+        description: "Show Time Id"
+        required: true
+      - in: "body"
+        name: "body"
+        description: "Show Time Details"
+        required: true
+        schema:
+          $ref: "#/definitions/showTimeInbound"
+      responses:
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: '#/definitions/ExceptionMessage'
+        "200":
+          description: "ok"   
+          schema:
+            $ref: '#/definitions/ApiStatus'
+      
+  /theatre/{theatreId}/delete:
+    delete:
+      tags:
+      - "Theatre"
+      summary: "Delete the theatre"
+      description: ""
+      operationId: "deleteTheTheatre"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "theatreId"
+        type: "integer"
+        in: "path"
+        description: "Theatre Id"
+        required: true
+      responses:
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: '#/definitions/ExceptionMessage'
+        "200":
+          description: "ok"
+          schema:
+            $ref: '#/definitions/ApiStatus'
+          
+  /theatre-screen/{theatreId}/screen/{screenId}/delete:
+    delete:
+      tags:
+      - "Theatre"
+      summary: "Delete the screen"
+      description: ""
+      operationId: "deleteTheScreen"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "theatreId"
+        type: "integer"
+        in: "path"
+        description: "Theatre Id"
+        required: true
+      - name: "screenId"
+        type: "integer"
+        in: "path"
+        description: "Theatre Id"
+        required: true
+      responses:
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: '#/definitions/ExceptionMessage'
+        "200":
+          description: "ok"
+          schema:
+            $ref: '#/definitions/ApiStatus'
+          
+  /theatre-show/{theatreId}/screen/{screenId}/show/{showId}/delete:
+    delete:
+      tags:
+      - "Theatre"
+      summary: "Delete the show"
+      description: ""
+      operationId: "deleteTheShow"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "theatreId"
+        type: "integer"
+        in: "path"
+        description: "Theatre Id"
+        required: true
+      - name: "screenId"
+        type: "integer"
+        in: "path"
+        description: "Screen Id"
+        required: true
+      - name: "showId"
+        type: "integer"
+        in: "path"
+        description: "Show Id"
+        required: true
+      responses:
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: '#/definitions/ExceptionMessage'
+        "200":
+          description: "ok"
+          schema:
+            $ref: '#/definitions/ApiStatus'
+          
+          
+          
+          
+  /theatre-showTime/{theatreId}/screen/{screenId}/show/{showId}/showTime/{showTimeId}/delete:
+    delete:
+      tags:
+      - "Theatre"
+      summary: "Delete the show Timing details"
+      description: ""
+      operationId: "deleteTheShowTime"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "theatreId"
+        type: "integer"
+        in: "path"
+        description: "Theatre Id"
+        required: true
+      - name: "showTimeId"
+        type: "integer"
+        in: "path"
+        description: "Show Time Id"
+        required: true
+      - name: "screenId"
+        type: "integer"
+        in: "path"
+        description: "Screen Id"
+        required: true
+      - name: "showId"
+        type: "integer"
+        in: "path"
+        description: "Show Id"
+        required: true
+      responses:
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: '#/definitions/ExceptionMessage'
+        "200":
+          description: "ok"
+          schema:
+            $ref: '#/definitions/ApiStatus'
+       
+definitions:
+  Screen_Inbound:
+    type: "object"
+    properties:
+      theatreId:
+        type: "integer"
+        example: 3
+      screenName: 
+        type: "string"
+        example: "Audi"
+      screenStatus:
+        type: "string"
+        example: "YetToBeOpened"
+      adminId:
+        type: "string"
+        example: "admin"
+      noOfSeatingRows:
+        type: "integer"
+        example: 30
+      noOfSeatingColumns:
+        type: "integer"
+        example: 20
+          
+          
+      
+  Screen_Outbound:
+    type: "object"
+    properties:
+      screenName: 
+        type: "string"
+        example: "Audi"
+      screenStatus:
+        type: "string"
+        example: "YetToBeOpened"
+      adminId:
+        type: "string"
+        example: "admin"
+      lastUpdatedTimeStamp:
+        type: "string"
+        example: "05/21/2020_12:48:55:234523"
+      runningMovie:
+        type: "string"
+        example: "Transformers"
+      showId:
+        type: "integer"
+        example: 1
+      upcomingShows:
+        type: "array"
+        items:
+          $ref: "#/definitions/showTimeOutbound"
+      noOfSeatingRows:
+        type: "integer"
+        example: "10"
+      noOfSeatingColumns:
+        type: "integer"
+        example: "10"
+            
+  
+  showInbound:
+    type: "object"
+    properties:
+      screenId: 
+        type: "integer"
+        example: 10
+      movieId:
+        type: "integer"
+        example: 25
+      EffectiveDate:
+        type: "string"
+        example: "2020-05-30"
+      adminId:
+        type: "string"
+        example: "admin"
+            
+            
+ 
+  
+  showTimeInbound:
+    type: "object"
+    properties:
+      date:
+        type: "string"
+        example: "2020-05-30"
+      showTime:
+        type: "string"
+        example: "10:00"
+      ticketPrice:
+        type: "number"
+        example: 100.23
+      adminId:
+        type: "string"
+        example: "admin"
+      status:
+        type: "string"
+        example: "WillBeScreened"
+        
+        
+  showTimeOutbound:
+    type: "object"
+    properties:
+      date:
+        type: "string"
+        example: "2020-05-30"
+      showTime:
+        type: "string"
+        example: "10:00"
+      ticketPrice:
+        type: "number"
+        example: 100.23
+      adminId:
+        type: "string"
+        example: "admin"
+      lastUpdatedTimeStamp:
+        type: "string"
+        example: "05/21/2020_14:43:50:345353"
+ 
+  Theatre_Outbound1:
+    type: "object"
+    properties:
+      descrption:
+        type: "string"
+        example: "List of Theatres"
+      listOfTheatres:
+        type: "array"
+        items:
+          $ref: "#/definitions/Theatre_Outbound"
+  
+  Theatre_Outbound3:
+    type: "object"
+    properties:
+      descrption:
+        type: "string"
+        example: "List of Theatres"
+      listOfTheatres:
+        type: "array"
+        items:
+          $ref: "#/definitions/Theatre_Outbound4"
+  
+    
+  Theatre_Outbound:
+    type: "object"
+    properties:
+      theatreId:
+        type: "string"
+        example: 1
+      theatreName: 
+        type: "string"
+        example: "AGR Cinemas"
+      buildingName:
+        type: "string"
+        example: "Phenix Mall"
+      area:
+        type: "string"
+        example: "Kazhakootam"
+      city:
+        type: "string"
+        example: "Trivandrum"
+      state:
+        type: "string"
+        example: "Kerela"
+      theatreType:
+        type: "string"
+        example: "Mall enclosed"
+      totalScreens:
+        type: "integer"
+        example: 2
+      theatreStatus:
+        type: "string"
+        example: "YetToOpen"
+      adminId:
+        type: "string"
+        example: "admin"
+      lastUpdatedTimeStamp:
+        type: "string"
+        example: "05/21/2020_12:43:50:345353"
+ 
+  Theatre_Outbound4:
+    type: "object"
+    properties:
+      theatreId:
+        type: "string"
+        example: 1
+      theatreName: 
+        type: "string"
+        example: "AGR Cinemas"
+      buildingName:
+        type: "string"
+        example: "Phenix Mall"
+      area:
+        type: "string"
+        example: "Kazhakootam"
+      city:
+        type: "string"
+        example: "Trivandrum"
+      state:
+        type: "string"
+        example: "Kerela"
+      theatreType:
+        type: "string"
+        example: "Mall enclosed"
+      theatreStatus:
+        type: "string"
+        example: "YetToOpen"
+      screenId:
+        type: "integer"
+        example: 3
+      screenName:
+        type: "string"
+        example: "BMW"
+      movieId:  
+        type: "integer"
+        example: 11
+      movieName:
+        type: "string"
+        example: "Mersal"
+  
+        
+  Theatre_Inbound1:
+    type: "object"
+    properties:
+      theatreName: 
+        type: "string"
+        example: "AGR Cinemas"
+      buildingName:
+        type: "string"
+        example: "Phenix Mall"
+      area:
+        type: "string"
+        example: "Kazhakootam"
+      city:
+        type: "string"
+        example: "Trivandrum"
+      state:
+        type: "string"
+        example: "Kerela"
+      theatreType:
+        type: "string"
+        example: "Mall enclosed"
+      totalScreens:
+        type: "integer"
+        example: 2
+      theatreStatus:
+        type: "string"
+        example: "YetToOpen"
+      adminId:
+        type: "string"
+        example: "admin"
+      
+   
+  Theatre_Outbound2:
+    type: "object"
+    properties:
+      theatreId:
+        type: "string"
+        example: 1
+      theatreName: 
+        type: "string"
+        example: "AGR Cinemas"
+      buildingName:
+        type: "string"
+        example: "Phenix Mall"
+      area:
+        type: "string"
+        example: "Kazhakootam"
+      city:
+        type: "string"
+        example: "Trivandrum"
+      state:
+        type: "string"
+        example: "Kerela"
+      theatreType:
+        type: "string"
+        example: "Mall enclosed"
+      totalScreens:
+        type: "integer"
+        example: 2
+      theatreStatus:
+        type: "string"
+        example: "YetToOpen"
+      adminId:
+        type: "string"
+        example: "admin"
+      lastUpdatedTimeStamp:
+        type: "string"
+        example: "05/21/2020_12:43:50:345353"
+      screens: 
+        type: "array"
+        items:
+          $ref: "#/definitions/Screen_Outbound"
+        example: 
+          - screenId: 1
+            screenName: "Audi"
+            screenStatus: "YetToBeOpen"
+            lastUpdatedTimeStamp: "05/21/2020_12:43:51:345353" 
+            runningMovie: "Transformers"
+            showId: 1
+            adminId: "admin"
+            noOfSeatingRows: 10
+            noOfSeatingColumns: 10
+            upcomingShows:
+              - date: "05/29/2020"
+                showTime: "10:00"
+                ticketPrice: 100
+                adminId: "admin"
+                lastUpdatedTimeStamp: "05/21/2020_12:43:51:45353"
+              - date: "05/30/2020"
+                showTime: "13:00"
+                ticketPrice: 110
+                adminId: "admin"
+                lastUpdatedTimeStamp: "05/21/2020_12:43:51:45353"
+          - screenId: 2
+            screenName: "Bendz"
+            screenStatus: "YetToBeOpen"
+            lastUpdatedTimeStamp: "05/21/2020_12:43:51:45353"
+            runningMovie: "Fast and Furious"
+            showId: 2
+            adminId: "admin"
+            upcomingShows:
+              - date: "05/30/2020"
+                showTime: "10:00"
+                ticketPrice: 100.50
+                adminId: "admin"
+                noOfSeatingRows: 20
+                noOfSeatingColumns: 20
+                lastUpdatedTimeStamp: "05/21/2020_12:43:51:45353"
+              - date: "05/31/2020"
+                showTime: "13:00"
+                ticketPrice: 110.50
+                adminId: "admin"
+                lastUpdatedTimeStamp: "05/21/2020_12:43:51:45353"
+                
+                
+  ApiStatus:
+    type: "object"
+    properties:
+      status:
+        type: "integer"
+        example: 200
+        
+        
+  ExceptionMessage:
+    type: "object"
+    properties:
+      status:
+        type: "integer"
+        example: 404
+      errorMessage:
+        type: "string"
+        example: "Bad reqeuest/ Not found"
+      errorDesciption:
+        type: "string"
+        example:  "Not found/invalid inputs"
+      DateTime:
+        type: "string"
+        example: "2020_06_01_10:57:231311"
+                
+    
+        

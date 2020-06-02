@@ -27,7 +27,7 @@ import com.booktheticket.bookingms.exceptionhandling.TheatreNotFound;
 import com.booktheticket.bookingms.service.BookingService1;
 
 @RestController
-@RequestMapping("/book")
+@RequestMapping("/booking")
 public class BookingRestController {
 
 	@Autowired
@@ -49,26 +49,26 @@ public class BookingRestController {
 		return service.bookTheTicket(bookingDetails);
 	}
 
-	@PutMapping("/booking/{bookingId}/cancel")
+	@PutMapping("/{bookingId}/cancel")
 	public ApiStatus canceTheTicket(@PathVariable("bookingId") int bookingId) throws BookingNotFound {
 		return service.canceTheTicket(bookingId);
 
 	}
 
-	@GetMapping("/booking/screen/{screenId}/showTime/{showTimeId}/genseatingchart")
+	@GetMapping("/screen/{screenId}/showTime/{showTimeId}/genseatingchart")
 	public SeatingChartOutDto getSeatingChart(@PathVariable("screenId") int screenId,
 			@PathVariable("showTimeId") int showTimeId) throws ScreenNotFound {
 		return service.getSeatingChart(screenId, showTimeId);
 
 	}
 
-	@GetMapping("/booking/{bookingId}/genticket")
+	@GetMapping("/{bookingId}/genticket")
 	public TicketDto generateTicket(@PathVariable("bookingId") int bookingId)
 			throws BookingNotFound, ScreenNotFound, TheatreNotFound {
 		return service.genTicket(bookingId);
 	}
 	
-	@GetMapping("/book/bookingreport/{location}/{fromDate}/{toDate}/genreport")
+	@GetMapping("/report/{location}/{fromDate}/{toDate}/genreport")
 	public BookingReportDto genReports(@PathVariable("location") String location, @PathVariable("fromDate") String fromDate, 
 			@PathVariable("toDate") String toDate)
 	

@@ -1,0 +1,323 @@
+swagger: "2.0"
+info:
+  description: "This is an Api documentation for Ticket Booking micro service."
+  version: "1.0.0"
+  title: "Booking Micro Service"
+  contact:
+    email: "karthick@gmail.com"
+ 
+host: "hostname"
+basePath: "/booking-ms/v1"
+tags:
+- name: "Booking"
+  description: "Methods to Book/Cancel the tickets."
+schemes:
+- "http"
+paths:
+  /booking:
+    post:
+      tags:
+      - "Booking"
+      summary: "Book the tickets."
+      description: ""
+      operationId: "bookTicket"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Ticekt Details"
+        required: true
+        schema:
+          $ref: "#/definitions/Ticket_Inbound"
+      responses:
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: '#/definitions/ExceptionMessage'
+        "200":
+          description: "ok"
+          schema:
+            $ref: '#/definitions/ApiStatus'
+            
+  /booking/{bookingId}/cancel:
+    put:
+      tags:
+      - "Booking"
+      summary: "Canel the ticket."
+      description: " "
+      operationId: "cancelTicekt"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "bookingId"
+        in: "path"
+        type: "integer"
+        description: "Booking Id"
+        required: true
+      responses:
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: '#/definitions/ExceptionMessage'
+        "200":
+          description: "ok"
+          schema:
+            $ref: '#/definitions/ApiStatus'
+          
+  /booking/{bookingId}/genticket:
+    get:
+      tags:
+      - "Booking"
+      summary: "Generate a ticket."
+      description: ""
+      operationId: "genTicket"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "bookingId"
+        in: "path"
+        type: "integer"
+        description: "Boooking Id"
+        required: true
+      responses:
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: '#/definitions/ExceptionMessage'
+        "200":
+          description: "ok"
+          schema:
+            $ref: "#/definitions/Ticket_Outbound"
+            
+  /booking/screen/{ScreenId}/showTime/{showTimeId}/genseatingchart:
+    get:
+      tags:
+      - "Booking"
+      summary: "Get a seating chart for the given screenId."
+      description: ""
+      operationId: "genSeatingChart"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "ScreenId"
+        in: "path"
+        type: "integer"
+        description: "screen Id"
+        required: true
+      - name: "showTimeId"
+        in: "path"
+        type: "integer"
+        description: "Show Time Id"
+        required: true
+      responses:
+        "405":
+          description: "bad request"
+          schema:
+            $ref: '#/definitions/ExceptionMessage'
+        "200":
+          description: "ok"
+          schema:
+            $ref: "#/definitions/SeatingChart_Outbound"
+  
+            
+  /booking/report/{location}/{fromdate}/{todate}/genreport:
+    get:
+      tags:
+      - "Booking"
+      summary: "Generate a report."
+      description: ""
+      operationId: "genReport"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "location"
+        in: "path"
+        type: "string"
+        description: "location"
+        required: true
+      - name: "fromdate"
+        in: "path"
+        type: "string"
+        description: "From Date"
+        required: true
+      - name: "todate"
+        in: "path"
+        type: "string"
+        description: "to Date"
+        required: true
+      responses:
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: '#/definitions/ExceptionMessage'
+        "200":
+          description: "ok"
+          schema:
+            $ref: "#/definitions/Ticket_Outbound1"
+        
+definitions:
+  Ticket_Inbound:
+    type: "object"
+    properties:
+      userId:
+        type: "string"
+        example: "kravi@gmail.com"
+      theatreId:
+        type: "integer"
+        example: 1
+      screenId:
+        type: "integer"
+        example: 3
+      movieId:
+        type: "integer"
+        example: 33
+      showId:
+        type: "integer"
+        example: 3
+      showTimeId:
+        type: "integer"
+        example: 6
+      showDate:
+        type: "string"
+        example: "2020-06-01"
+      showTime:
+        type: "string"
+        example: "11:00"
+      ticketPrice:
+        type: "number"
+        example: 120.75
+      seatNumbers:
+        type: "string"
+        example: "F11,F12,F13"
+      numberOfSeatsBooked:
+        type: "integer"
+        example: 3
+        
+          
+  Ticket_Outbound:
+    type: "object"
+    properties:
+      userEmailId:
+       type: "string"
+       example: "karthick@gmail.com"
+      theatreName:
+        type: "string"
+        example: "AGR multiplex"
+      screenName:
+        type: "string"
+        example: 'Audi'
+      theatreAddress:
+       type: "string"
+       example: "kazhakootam,Trivandrum."
+      showDate:
+        type: "string"
+        example: "14-June-2020"
+      showTime:
+        type: "string"
+        example: "11:00"
+      ticketPrice:
+        type: "number"
+        example: 100
+      seatNumbers:
+        type: "string"
+        example: "F11,F12,F13"
+      totalSeatsBooked:
+        type: "integer"
+        example: 3
+      totalPrice:
+        type: "number"
+        example: 330.00
+      status:
+        type: "string"
+        example: "confirmed"
+        
+        
+  SeatingChart_Outbound:
+    type: "object"
+    properties:
+      description: 
+        type: "string"
+        example: "Seating Chart for screenId 5"
+      seatingChart:
+        type: "array"
+        items:
+          $ref: "#/definitions/SeatingChart"
+        example:
+         - seatNumber: "A01"
+           isBooked: "false"
+         - seatNumber: "A02"
+           isBooked: "false"
+         - seatNumber: "A03"
+           isBooked: "false"
+         - seatNumber: "A04"
+           isBooked: "false"
+         - seatNumber: "B01"
+           isBooked: "false"
+         - seatNumber: "B02"
+           isBooked: "true"
+         - seatNumber: "B03"
+           isBooked: "true"
+         - seatNumber: "B04"
+           isBooked: "false"
+        
+          
+  SeatingChart:
+    type: "object"
+    properties:
+      seatNumber:
+        type: "string"
+        example: "F11"
+      isBooked:
+        type: "boolean"
+        example: "false"
+      
+    
+  ApiStatus:
+    type: "object"
+    properties:
+      status:
+        type: "integer"
+        example: 200
+        
+        
+  ExceptionMessage:
+    type: "object"
+    properties:
+      status:
+        type: "integer"
+        example: 404
+      errorMessage:
+        type: "string"
+        example: "Bad reqeuest/ Not found"
+      errorDesciption:
+        type: "string"
+        example:  "Not found/invalid inputs"
+      DateTime:
+        type: "string"
+        example: "2020_06_01_10:57:231311"
+                
+  Ticket_Outbound1:
+    type: "object"
+    properties:
+      description:
+        type: "string"
+        example: "Report on booking"
+      listOfBookingDetails:
+        type: "array"
+        items:
+          $ref: "#/definitions/Ticket_Outbound"
+      
+        
+  
+    
