@@ -37,15 +37,16 @@ To get started you can simply clone this repository using git:
         git clone https://github.com/Karthickben/Ticket-Booking-System.git
         
 ## Build an executable JAR
-You can run the application from the command line using:
 
+        You can run the application from the command line using:
         mvn spring-boot:run
+        
         Or you can build a single executable JAR file that contains all the necessary dependencies, classes, and resources with:
-
         mvn clean package
+        
         Then you can run the JAR file with:
-
         java -jar target/*.jar
+        
         Instead of mvn you can also use the maven-wrapper ./mvnw to ensure you have everything necessary to run the Maven build.
   
   
