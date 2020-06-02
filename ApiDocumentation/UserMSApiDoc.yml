@@ -113,7 +113,7 @@ definitions:
       phoneNumber:
         type: "number"
         example: 8767453322
-      Password:
+      password:
         type: "string"
         example: "*********"
       

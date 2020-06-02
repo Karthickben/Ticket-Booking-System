@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 public class ScreenInDto {
 	
 
-	@Min(1100001)
+	@Min(110000)
 	private  int theatreId;
 	@NotNull @NotEmpty @Size(max = 100,min = 1)
 	private String screenName;
