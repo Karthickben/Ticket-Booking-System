@@ -1,0 +1,23 @@
+server:
+  port: 8085
+spring:  application:    name: Api GateWay
+eureka:  client:
+    service-url:      defaultZone: http://localhost:5555/eureka/
+      
+zuul:
+   routes:
+      USERMS:
+        path: /user/**
+        service-id: USERMS
+      MOVIEMS:
+        path: /movie/**
+        service-id: MOVIEMS
+      THEATREMS:
+        path: /theatre/**
+        service-id: THEATREMS
+      BOOKINGMS:
+        path: /booking/**
+        service-id: BOOKINGMS
+      REPORTINGMS:
+        path: /report/**
+        service-id: REPORTINGMS
