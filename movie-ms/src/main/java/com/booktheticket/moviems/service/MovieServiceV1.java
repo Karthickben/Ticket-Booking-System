@@ -2,6 +2,7 @@ package com.booktheticket.moviems.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -82,10 +83,15 @@ public class MovieServiceV1 implements MovieService {
 	@Override
 	public ApiStatus updateMovieDetails(int movieId, MovieInboundDto movieDetails) throws MovieNotFoundException {
 
-		repo.findById(movieId).orElseThrow(movieNotFound);
+		Optional<Movie> movieDet = repo.findById(movieId);
+		if(!movieDet.isPresent()) {
+			throw movieNotFound.get();
+		}
 
 		Movie movie = convertToEntity.apply(movieDetails);
 		movie.setMovieId(movieId);
+		movie.setRating(movieDet.get().getRating());
+		movie.setNumberOfRatings(movieDet.get().getNumberOfRatings());
 		movie.setLastUpdatedTimestamp(LocalDateTime.now());
 		repo.save(movie);
 		status.setStatus(200);
