@@ -1,12 +1,11 @@
 # Ticket-Booking-System
-Online Cinema Ticket Booking system based on Micro Service Architecture. Ticket booking ticketing system is decomposed into below four microservices.
+Online Cinema Ticket Booking system based on Micro Service Architecture. Ticket booking ticketing system is decomposed into below four microservices. Each microsevices is an individual rest api and can communicate with other services.
    
-   1) User Micro Service:  customer/admim details. 
-   2) Movie Micro Service: Movie details.
-   3) Theatre Micro Service: Theatre, screen and show related details.
-   4) Booking Micro Service: For ticket booking and cancellation.
-   
-Each microsevices is an individual rest api and can communicate with other services.
+   1) User Micro Service:  Handles customer/admim details. 
+   2) Movie Micro Service: Handles movie details.
+   3) Theatre Micro Service: Handles theatre, screen and show related details.
+   4) Booking Micro Service: Handles ticket booking and cancellation.
+ 
 
 # Prerequisites
         Java 1.8
