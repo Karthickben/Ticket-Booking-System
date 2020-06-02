@@ -49,7 +49,7 @@ public class UserServiceV1 implements UserService {
 			throw new UserAlreadyExistException("User with Id "+userDetails.getEmailId()+" is alreay exsists.");
 		}
 		User user = convertToEntity.apply(userDetails);
-		user.setRole("User");
+		user.setRole("user");
 		user.setLastUpdatedTimestamp(LocalDateTime.now());	
 		repo.save(user);
 		status.setStatus(200);
