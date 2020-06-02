@@ -1,5 +1,6 @@
 package com.booktheticket.bookingms.repo;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,6 +13,6 @@ public interface BookingRepo extends JpaRepository<Booking, Integer>{
 
 	List<Booking> findByShowTimeId(int showId);
 
-	List<Booking> findBYShowDateBetweenAndTheatrAddress(String fromDate, String toDate, String location);
+	List<Booking> findByShowDateBetween(LocalDate fDate, LocalDate tDate);
 
 }

@@ -179,13 +179,24 @@ public class BookingService1 {
 
 	public BookingReportDto genReports(String location, String fromDate, String toDate)
 			throws BookingNotFound, ScreenNotFound, TheatreNotFound {
+		
+		String[] from = fromDate.split("-");
+		LocalDate fDate = LocalDate.of(Integer.parseInt(from[0]), Integer.parseInt(from[1]),
+				Integer.parseInt(from[2]));
+		
+		String[] to = toDate.split("-");
+		LocalDate tDate = LocalDate.of(Integer.parseInt(to[0]), Integer.parseInt(to[1]),
+				Integer.parseInt(to[2]));
 
-		List<Booking> listOfBooking = repo.findBYShowDateBetweenAndTheatrAddress(fromDate, toDate, location);
+		List<Booking> listOfBooking = repo.findByShowDateBetween(fDate, tDate);
 
 		List<TicketDto> listOfBookingDetails = new ArrayList<>();
 
 		for (Booking book : listOfBooking) {
-			listOfBookingDetails.add(genTicket(book.getBookingId()));
+			TicketDto genTicket = genTicket(book.getBookingId());
+			if(genTicket.getTheatrAddress().equalsIgnoreCase(location)) {
+				listOfBookingDetails.add(genTicket);
+			}
 		}
 
 		BookingReportDto report = new BookingReportDto();
