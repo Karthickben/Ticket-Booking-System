@@ -1,0 +1,343 @@
+swagger: "2.0"
+info:
+  description: "This is an Api documentation for Movie micro service."
+  version: "1.0.0"
+  title: "Movie Micro Service"
+  contact:
+    email: "karthick@gmail.com"
+ 
+host: "hostname"
+basePath: "/movie-ms/v1"
+tags:
+- name: "Movie"
+  description: "Methods to manipulate the movie resource."
+schemes:
+- "http"
+paths:
+  /movie:
+    post:
+      tags:
+      - "Movie"
+      summary: "Add a new movie."
+      description: "Only Admin has the access to add a new movie."
+      operationId: "addMovie"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Movie Details"
+        required: true
+        schema:
+          $ref: "#/definitions/Movie_Inbound"
+      responses:
+        "405":
+          description: "Bad Request"
+          schema:
+            $ref: '#/definitions/ExceptionMessage'
+        "200":
+          description: "Ok"
+          schema:
+            $ref: '#/definitions/ApiStatus'
+      
+    
+        
+  /movie/getdetails:        
+    get:
+      tags:
+      - "Movie"
+      summary: "Get the list of movies"
+      description: ""
+      operationId: "getMovieList"
+      produces:
+      - "application/json"
+      responses:
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/ExceptionMessage"
+        "200":
+          description: "ok"
+          schema:
+            $ref: "#/definitions/Movie_Outbound1"
+          
+  /movie/name/{movieName}/getdetails:
+    get:
+      tags:
+      - "Movie"
+      summary: "Get the list of movies by name"
+      description: ""
+      operationId: "getMovieListByName"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "movieName"
+        in: "path"
+        description: "movie name"
+        required: true
+        type: "string"
+        format: ""
+      responses:
+        "405":
+          description: "BadRequest"
+          schema:
+            $ref: '#/definitions/ExceptionMessage'
+        "200":
+          description: "ok"
+          schema:
+            $ref: "#/definitions/Movie_Outbound1"
+  
+  /movie/id/{movieId}/getdetails:
+    get:
+      tags:
+      - "Movie"
+      summary: "Get the details of movies by Id"
+      description: ""
+      operationId: "getMovieById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "movieId"
+        in: "path"
+        description: "movie Id"
+        required: true
+        type: "integer"
+        format: ""
+      responses:
+        "405":
+          description: "Bad Request"
+          schema:
+            $ref: '#/definitions/ExceptionMessage'
+            
+        "200":
+          description: "ok"
+          schema:
+            $ref: "#/definitions/Movie_Outbound"
+            
+  /movie/{movieId}:
+    delete:
+      tags:
+       - "Movie"
+      summary: "Delete the movie by id"
+      description: "Only admins have access to delete the movie details."
+      operationId: "deleteMovieById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "movieId"
+        in: "path"
+        description: "movie id"
+        required: true
+        type: "integer"
+        format: ""
+      responses:
+        "405":
+          description: "Bad Request"
+          schema:
+            $ref: '#/definitions/ExceptionMessage'
+        "200":
+          description: "ok"
+          schema:
+            $ref: '#/definitions/ApiStatus'
+          
+    
+    put:
+      tags:
+        - "Movie"
+      summary: "Update the movie details"
+      description: "Only admins have access to update the movie details."
+      operationId: "updateMovie"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "movieId"
+          in: "path"
+          description: "movie id"
+          required: true
+          type: "integer"
+          format: ""
+        - in: "body"
+          name: "body"
+          description: "Movie Details"
+          required: true
+          schema:
+             $ref: "#/definitions/Movie_Inbound"
+      responses:
+        "405":
+          description: "Bad request"
+          schema:
+            $ref: '#/definitions/ExceptionMessage'
+        "200":
+          description: "ok"
+          schema:
+            $ref: '#/definitions/ApiStatus'
+          
+  /movie/{movieId}/rate:
+    put:
+      tags:
+        - "Movie"
+      summary: "Rate the movie"
+      description: ""
+      operationId: "rateMovie"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "movieId"
+          in: "path"
+          description: "movie id"
+          required: true
+          type: "integer"
+          format: ""
+        - in: "body"
+          name: "body"
+          description: "Rating"
+          required: true
+          schema:
+             $ref: "#/definitions/Rate"
+      responses:
+        "405":
+          description: "Bad Request"
+          schema: 
+            $ref: '#/definitions/ExceptionMessage'
+        "200":
+          description: "ok"
+          schema:
+            $ref: '#/definitions/ApiStatus'
+  
+
+definitions:
+  Movie_Inbound:
+    required:
+      - "movieName"
+      - "language"
+      - "description"
+      - "genre"
+      - "cast"
+      - "director"
+      - "musicDirector"
+      - "duration"
+      - "sensorCertificate"
+      - "adminId"
+    type: "object"
+    properties:
+      
+      movieName:
+        type: "string"
+        example: "Transformers"
+      language:
+        type: "string"
+        example: "english"
+      description:
+        type: "string"
+        example: "science fiction action films based on the Transformers."
+      genre:
+        type: "string"
+        example: "science fiction"
+      cast:
+        type: "string"
+        example: "Rogers, Jessica"
+      director:
+        type: "string"
+        example: "Robert"
+      musicDirector:
+        type: "string"
+        example: "Steve"
+      duration:
+        type: "string"
+        example: "2:05"
+      censorCertificate:
+        type: "string"
+        example: "U"
+      adminId:
+        type: "string"
+        example: "admin"
+        
+        
+  Movie_Outbound:
+    type: "object"
+    properties:
+      movieId:
+        type: "integer"
+        example: 1
+      movieName:
+        type: "string"
+        example: "Transformers"
+      language:
+        type: "string"
+        example: "english"
+      description:
+        type: "string"
+        example: "science fiction action films based on the Transformers."
+      genre:
+        type: "string"
+        example: "science fiction"
+      cast:
+        type: "string"
+        example: "Rogers, Jessica"
+      director:
+        type: "string"
+        example: "Robert"
+      musicDirector:
+        type: "string"
+        example: "Steve"
+      duration:
+        type: "string"
+        example: "2:05"
+      censorCertificate:
+        type: "string"
+        example: "U"
+      adminId:
+        type: "string"
+        example: "admin"
+      lastUpdatedTimeStamp:
+        type: "string"
+        example: "05/20/2020_05:47:20:234543"
+        
+  Movie_Outbound1:
+    type: "object"
+    properties:
+      responseDescription:
+        example: List of movies
+        type: "string"
+      listOfMovies:
+        type: "array"
+        items:
+          $ref: "#/definitions/Movie_Outbound"
+          
+  ApiStatus:
+    type: "object"
+    properties:
+      status:
+        type: "integer"
+        example: 200
+        
+        
+  ExceptionMessage:
+    type: "object"
+    properties:
+      status:
+        type: "integer"
+        example: 404
+      errorMessage:
+        type: "string"
+        example: "Bad reqeuest/ Not found"
+      errorDesciption:
+        type: "string"
+        example:  "Movie not found/invalid input"
+      DateTime:
+        type: "string"
+        example: "2020_06_01_10:57:231311"
+  Rate:
+    type: "object"
+    properties:
+      rateing:
+        type: "number"
+        example: 4.4
+      
+  

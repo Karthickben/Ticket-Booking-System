@@ -1,0 +1,172 @@
+swagger: "2.0"
+info:
+  description: "This is an Api documentation for User micro service."
+  version: "1.0.0"
+  title: "User Micro Service"
+  contact:
+    email: "karthick@gmail.com"
+ 
+host: "hostname"
+basePath: "/user-ms/v1"
+tags:
+- name: "User"
+  description: "Methods to manipulate the user resource."
+schemes:
+- "http"
+paths:
+  /user:
+    post:
+      tags:
+      - "User"
+      summary: "Register a new user."
+      description: ""
+      operationId: "addUser"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "User Details"
+        required: true
+        schema:
+          $ref: "#/definitions/User_Inbound"
+      responses:
+        "200":
+          description: "ok"
+          schema:
+            $ref: "#/definitions/ApiStatus"
+        "405":
+          description: "bad request"
+          schema:
+            $ref: "#/definitions/ExceptionMessage"
+          
+    
+  /user/validate:
+    post:
+      tags:
+      - "User"
+      summary: "Validate the user credentials."
+      description: " Email or UserId can be used for login."
+      operationId: "validateUser"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "User Credentials"
+        required: true
+        schema:
+          $ref: "#/definitions/User_Credentials"
+      responses:
+        "200":
+          description: "ok"
+          schema:
+            $ref: "#/definitions/ApiStatus"
+        "405":
+          description: "bad request"
+          schema:
+            $ref: "#/definitions/ExceptionMessage"
+            
+            
+  /user/emailId/{emailId}:
+    get:
+      tags:
+      - "User"
+      summary: "Get an user details for the given email Id."
+      description: " "
+      operationId: "getUserByEmailId"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "emailId"
+        in: "path"
+        description: "Email Id"
+        required: true
+        type: "string"
+      responses:
+        "405":
+          description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ExceptionMessage"
+        "200":
+          description: "ok." 
+          schema:
+            $ref: "#/definitions/User_Outbound"
+          
+    
+definitions:
+  User_Inbound:
+    type: "object"
+    properties:
+      emailId:
+       type: "string"
+       example: "kben@gmail.com"
+      userName:
+        type: "string"
+        example: "Karthick Ravi"
+      phoneNumber:
+        type: "number"
+        example: 8767453322
+      Password:
+        type: "string"
+        example: "*********"
+      
+  User_Credentials:
+    type: "object"
+    properties:
+      emailId:
+       type: "string"
+       example: "kben@gmail.com"
+      password:
+        type: "string"
+        example: "*********"
+      role:
+        type: "string"
+        example: "admin"
+        
+  User_Outbound:
+    type: "object"
+    properties:
+      emailId:
+       type: "string"
+       example: "kben@gmail.com"
+      phoneNumber:
+        type: "number"
+        example: 8767453322
+      role:
+        type: "string"
+        example: "user"
+        
+        
+  ApiStatus:
+    type: "object"
+    properties:
+      status:
+        type: "integer"
+        example: 200
+        
+        
+  ExceptionMessage:
+    type: "object"
+    properties:
+      status:
+        type: "integer"
+        example: 404
+      errorMessage:
+        type: "string"
+        example: "Bad reqeuest/ Not found"
+      errorDesciption:
+        type: "string"
+        example:  "User not found/invalid credentials"
+      DateTime:
+        type: "string"
+        example: "2020_06_01_10:57:231311"
+      
+    
+        
