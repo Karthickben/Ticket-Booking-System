@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -116,8 +117,8 @@ public class ShowServiceV1 {
 		sRepo.findById(screenId).orElseThrow(screenNotFound);
 		String movieuri = "http://MOVIEMS/movie-ms/v1/movie/id/" + show.getMovieId() + "/getdetails";
 		ResponseEntity<MovieDetailsDto> movie = client.getForEntity(movieuri, MovieDetailsDto.class);
-		MovieDetailsDto body = movie.getBody();
-		if (body.getMovieId() != show.getMovieId()) {
+		HttpStatus statusCode = movie.getStatusCode();
+		if (statusCode!= HttpStatus.OK) {
 			throw new MovieNotFoundException("Movie not found");
 		}
 
