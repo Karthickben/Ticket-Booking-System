@@ -1,6 +1,6 @@
 server:
   port: 8085
-spring:  application:    name: Api GateWay
+spring:  application:    name: Api GateWay Zuul
 eureka:  client:
     service-url:      defaultZone: http://localhost:5555/eureka/
       
