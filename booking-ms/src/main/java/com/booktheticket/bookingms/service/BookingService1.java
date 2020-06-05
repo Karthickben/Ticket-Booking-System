@@ -107,6 +107,8 @@ public class BookingService1 {
 				System.out.println(seatNum);
 				if (!anyMatch) {
 					lisLtOfSeats.add(new SeatingoutDto(seatNum, false));
+				}else {
+					lisLtOfSeats.add(new SeatingoutDto(seatNum, true));
 				}
 
 			}
