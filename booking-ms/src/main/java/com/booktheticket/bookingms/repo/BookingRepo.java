@@ -15,4 +15,6 @@ public interface BookingRepo extends JpaRepository<Booking, Integer>{
 
 	List<Booking> findByShowDateBetween(LocalDate fDate, LocalDate tDate);
 
+	List<Booking> findByUserId(String user);
+
 }

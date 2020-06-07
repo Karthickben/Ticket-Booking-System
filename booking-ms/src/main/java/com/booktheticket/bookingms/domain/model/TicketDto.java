@@ -5,6 +5,8 @@ public class TicketDto {
 	private String userEmailId;
 	private String theatreName;
 	private String screenName;
+	private int bookingId;
+	private String movieName;
 	private String theatrAddress;
 	private String showDate;
 	private String showTime;
@@ -80,5 +82,20 @@ public class TicketDto {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	public String getMovieName() {
+		return movieName;
+	}
+	public void setMovieName(String movieName) {
+		this.movieName = movieName;
+	}
+	public int getBookingId() {
+		return bookingId;
+	}
+	public void setBookingId(int bookingId) {
+		this.bookingId = bookingId;
+	}
+	
+	
+	
 	
 }

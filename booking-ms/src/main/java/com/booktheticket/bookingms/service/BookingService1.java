@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import com.booktheticket.bookingms.domain.entity.Booking;
 import com.booktheticket.bookingms.domain.model.ApiStatus;
 import com.booktheticket.bookingms.domain.model.BookingInDto;
 import com.booktheticket.bookingms.domain.model.BookingReportDto;
+import com.booktheticket.bookingms.domain.model.ScreenOutDto;
 import com.booktheticket.bookingms.domain.model.ScreenSeatingDetailsOut;
 import com.booktheticket.bookingms.domain.model.SeatingChartOutDto;
 import com.booktheticket.bookingms.domain.model.SeatingoutDto;
@@ -100,7 +102,7 @@ public class BookingService1 {
 		List<SeatingoutDto> lisLtOfSeats = new ArrayList<>();
 		int seatNumbering = 'A' + seatingDetails.getBody().getNoOfSeatingRows();
 
-		for (char alpha = 'A'; alpha <= seatNumbering; alpha++) {
+		for (char alpha = 'A'; alpha < seatNumbering; alpha++) {
 			for (int i = 1; i <= seatingDetails.getBody().getNoOfSeatingColumns(); i++) {
 				String seatNum = alpha + "" + i;
 				boolean anyMatch = seatList.stream().anyMatch(s -> s.equals(seatNum));
@@ -146,6 +148,16 @@ public class BookingService1 {
 		ticket.setTotalPrice(booking.getTotalPrice());
 		ticket.setUserEmailId(booking.getUserId());
 		ticket.setTotalSeatsBoooked(booking.getNumberOfSeatsBooked());
+		
+		 Optional<ScreenOutDto> movieName =
+				 theatreDetails.getScreens().stream().filter(screen->screen.getScreenId()==booking.getScreenId()).findFirst();
+		 
+		 
+
+		 ticket.setMovieName(movieName.get().getRunningMovie());
+		 ticket.setBookingId(booking.getBookingId());
+		
+	
 
 		return ticket;
 
@@ -205,5 +217,24 @@ public class BookingService1 {
 		report.setListOfBookingDetails(listOfBookingDetails);
 		return report;
 	}
+	
+	public BookingReportDto genReportsByUser(String user)
+			throws BookingNotFound, ScreenNotFound, TheatreNotFound {
+		
+
+		List<Booking> listOfBooking = repo.findByUserId(user);
+
+		List<TicketDto> listOfBookingDetails = new ArrayList<>();
+
+		for (Booking book : listOfBooking) {
+			TicketDto genTicket = genTicket(book.getBookingId());
+				listOfBookingDetails.add(genTicket);	
+		}
+
+		BookingReportDto report = new BookingReportDto();
+		report.setListOfBookingDetails(listOfBookingDetails);
+		return report;
+	}
+	
 
 }

@@ -24,6 +24,7 @@ import com.booktheticket.theatrems.doamin.modal.TheatreDetailsOutDto;
 import com.booktheticket.theatrems.doamin.modal.TheatreInDto;
 import com.booktheticket.theatrems.doamin.modal.TheatreListDto;
 import com.booktheticket.theatrems.exceptionhandling.MovieNotFoundException;
+import com.booktheticket.theatrems.exceptionhandling.TheatreAlreadyExsists;
 import com.booktheticket.theatrems.exceptionhandling.TheatreNotFoundException;
 import com.booktheticket.theatrems.exceptionhandling.TheatreValidationException;
 import com.booktheticket.theatrems.service.TheatreServiceV1;
@@ -44,7 +45,7 @@ public class TheatreRestController {
 
 	@PostMapping
 	public ApiStatus createNewTheatre(@RequestBody TheatreInDto theatre, BindingResult beanValidationResults)
-			throws TheatreValidationException {
+			throws TheatreValidationException, TheatreAlreadyExsists {
 
 		if (beanValidationResults.hasErrors()) {
 			throw theatreValidationException.apply(getValidationErrorMessage.apply(beanValidationResults));
@@ -86,5 +87,6 @@ public class TheatreRestController {
 			@PathVariable("location") String city) throws MovieNotFoundException {
 		return service.getTheatresByNameLocation(movieName, city);
 	}
-
+	
+	
 }

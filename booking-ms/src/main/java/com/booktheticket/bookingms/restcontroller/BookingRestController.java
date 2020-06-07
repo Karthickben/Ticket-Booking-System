@@ -78,5 +78,15 @@ public class BookingRestController {
 		
 		return service.genReports(location, fromDate, toDate);
 	}
+	
+	@GetMapping("/report/user/{user}/genreport")
+	public BookingReportDto genReportsForTheGivenUser(@PathVariable("user") String user )
+			throws BookingNotFound, ScreenNotFound, TheatreNotFound {
+		
+		return service.genReportsByUser(user);
+		
+	
+	}
+	
 
 }

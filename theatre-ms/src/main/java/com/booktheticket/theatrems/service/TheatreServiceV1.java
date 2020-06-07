@@ -31,6 +31,7 @@ import com.booktheticket.theatrems.doamin.modal.TheatreInDto;
 import com.booktheticket.theatrems.doamin.modal.TheatreListDto;
 import com.booktheticket.theatrems.doamin.modal.TheatreOutDto;
 import com.booktheticket.theatrems.exceptionhandling.MovieNotFoundException;
+import com.booktheticket.theatrems.exceptionhandling.TheatreAlreadyExsists;
 import com.booktheticket.theatrems.exceptionhandling.TheatreNotFoundException;
 import com.booktheticket.theatrems.repository.ScreenRepo;
 import com.booktheticket.theatrems.repository.ShowRepo;
@@ -80,9 +81,20 @@ public class TheatreServiceV1 {
 
 	private Show show;
 
-	public ApiStatus addNewTheatre(TheatreInDto theatre) {
-
+	public ApiStatus addNewTheatre(TheatreInDto theatre) throws TheatreAlreadyExsists {
+		
+		Optional<Theatre> t = repo.findByTheatreNameAndArea(theatre.getTheatreName(),theatre.getArea());
+		
+		if(t.isPresent()) {
+			
+			throw new TheatreAlreadyExsists("Theatre with theatre.getTheatreName() is already exsists in theatre.getArea()");
+			
+			
+		}
+		
 		Theatre theatre1 = convertToTheatreEntity.apply(theatre);
+			
+
 		theatre1.setLastUpdatedTimestamp(LocalDateTime.now());
 		repo.save(theatre1);
 		status.setStatus(200);
