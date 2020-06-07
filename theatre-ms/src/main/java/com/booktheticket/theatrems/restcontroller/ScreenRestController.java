@@ -23,6 +23,7 @@ import com.booktheticket.theatrems.doamin.modal.ScreenInDto;
 import com.booktheticket.theatrems.doamin.modal.ScreenSeatingDetailsOut;
 import com.booktheticket.theatrems.exceptionhandling.ScreenNotFoundException;
 import com.booktheticket.theatrems.exceptionhandling.ScreenValidationException;
+import com.booktheticket.theatrems.exceptionhandling.ShowsFoundException;
 import com.booktheticket.theatrems.exceptionhandling.TheatreNotFoundException;
 import com.booktheticket.theatrems.service.ScreenServiceV1;
 
@@ -73,7 +74,7 @@ public class ScreenRestController {
 
 	@GetMapping(path = "/screen/{screenId}/getSeatDetails")
 	public ScreenSeatingDetailsOut getScreenSeatingDetails(@PathVariable("screenId") int screenId)
-			throws ScreenNotFoundException {
+			throws ScreenNotFoundException, ShowsFoundException {
 		return service.getSeatingDetails(screenId);
 
 	}

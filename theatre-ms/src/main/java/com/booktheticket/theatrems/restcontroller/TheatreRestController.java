@@ -24,6 +24,7 @@ import com.booktheticket.theatrems.doamin.modal.TheatreDetailsOutDto;
 import com.booktheticket.theatrems.doamin.modal.TheatreInDto;
 import com.booktheticket.theatrems.doamin.modal.TheatreListDto;
 import com.booktheticket.theatrems.exceptionhandling.MovieNotFoundException;
+import com.booktheticket.theatrems.exceptionhandling.ScreenFoundException;
 import com.booktheticket.theatrems.exceptionhandling.TheatreAlreadyExsists;
 import com.booktheticket.theatrems.exceptionhandling.TheatreNotFoundException;
 import com.booktheticket.theatrems.exceptionhandling.TheatreValidationException;
@@ -71,7 +72,7 @@ public class TheatreRestController {
 	}
 
 	@DeleteMapping("/{theatreId}/delete")
-	public ApiStatus deleteTheTheatre(@PathVariable("theatreId") int theatreId) throws TheatreNotFoundException {
+	public ApiStatus deleteTheTheatre(@PathVariable("theatreId") int theatreId) throws TheatreNotFoundException, ScreenFoundException {
 		return service.deleteTheatre(theatreId);
 	}
 

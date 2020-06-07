@@ -1,5 +1,6 @@
 package com.booktheticket.theatrems.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,7 +13,7 @@ public interface TheatreRepo extends JpaRepository<Theatre, Integer>{
 
 	Optional<Theatre> findByTheatreName(String theatreName);
 
-	Optional<Theatre> findByTheatreNameAndArea(String theatreName, String area);
+	List<Theatre> findByTheatreNameAndArea(String theatreName, String area);
 
 	
 

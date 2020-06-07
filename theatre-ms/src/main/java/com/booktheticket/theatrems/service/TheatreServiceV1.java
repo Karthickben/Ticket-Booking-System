@@ -2,7 +2,6 @@ package com.booktheticket.theatrems.service;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -31,6 +30,7 @@ import com.booktheticket.theatrems.doamin.modal.TheatreInDto;
 import com.booktheticket.theatrems.doamin.modal.TheatreListDto;
 import com.booktheticket.theatrems.doamin.modal.TheatreOutDto;
 import com.booktheticket.theatrems.exceptionhandling.MovieNotFoundException;
+import com.booktheticket.theatrems.exceptionhandling.ScreenFoundException;
 import com.booktheticket.theatrems.exceptionhandling.TheatreAlreadyExsists;
 import com.booktheticket.theatrems.exceptionhandling.TheatreNotFoundException;
 import com.booktheticket.theatrems.repository.ScreenRepo;
@@ -83,11 +83,12 @@ public class TheatreServiceV1 {
 
 	public ApiStatus addNewTheatre(TheatreInDto theatre) throws TheatreAlreadyExsists {
 		
-		Optional<Theatre> t = repo.findByTheatreNameAndArea(theatre.getTheatreName(),theatre.getArea());
+		List<Theatre> t = repo.findByTheatreNameAndArea(theatre.getTheatreName(),theatre.getArea());
 		
-		if(t.isPresent()) {
+		if(!t.isEmpty()) {
 			
-			throw new TheatreAlreadyExsists("Theatre with theatre.getTheatreName() is already exsists in theatre.getArea()");
+			throw new TheatreAlreadyExsists("Theatre with name "+theatre.getTheatreName() +" is already exsists in area "
+					+ theatre.getArea()+".");
 			
 			
 		}
@@ -126,11 +127,18 @@ public class TheatreServiceV1 {
 
 	}
 
-	public ApiStatus deleteTheatre(int theatreId) throws TheatreNotFoundException {
+	public ApiStatus deleteTheatre(int theatreId) throws TheatreNotFoundException, ScreenFoundException {
 		Optional<Theatre> findById = repo.findById(theatreId);
 		if (!findById.isPresent()) {
 			throw theatreNotFound.get();
 		}
+		
+		List<Screen> findByTheatre = sRepo.findByTheatre(findById.get());
+		if(!findByTheatre.isEmpty()) {
+			throw new ScreenFoundException("Screen(s) exsists for this theatre");
+			
+		}
+		
 
 		repo.delete(findById.get());
 		status.setStatus(200);
@@ -194,6 +202,7 @@ public class TheatreServiceV1 {
 			ResponseEntity<MovieDetailsDto> movie = client.getForEntity(movieuri, MovieDetailsDto.class);
 			MovieDetailsDto movieDetails = movie.getBody();
 			screenOutDeatils.setRunningMovie(movieDetails.getMovieName());
+			screenOutDeatils.setMovieId(movieDetails.getMovieId());
 			screenOutDeatils.setShowId(show.getShowId());
 			List<ShowTimeOutDto> showTimeList = stRepo.findByShow(show).stream().map(convertToShowTimingsFullDetailsDto)
 					.collect(Collectors.toList());

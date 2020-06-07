@@ -16,6 +16,7 @@ public class ScreenOutDto {
 	private String lastUpdatedTimestamp;
 	private int showId;
 	private String  runningMovie;
+	private int movieId;
 	private List<ShowTimeOutDto> upcomingShows;
 	
 	{
@@ -81,6 +82,13 @@ public class ScreenOutDto {
 	public void setUpcomingShows(List<ShowTimeOutDto> upcomingShows) {
 		this.upcomingShows = upcomingShows;
 	}
+	public int getMovieId() {
+		return movieId;
+	}
+	public void setMovieId(int movieId) {
+		this.movieId = movieId;
+	}
+	
 	
 	
 	
