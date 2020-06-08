@@ -21,3 +21,5 @@ zuul:
       REPORTINGMS:
         path: /report/**
         service-id: REPORTINGMS
+        
+        

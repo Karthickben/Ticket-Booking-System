@@ -3,6 +3,7 @@ package com.booktheticket.theatrems.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -16,6 +17,7 @@ import com.booktheticket.theatrems.doamin.modal.ShowTimeInDto;
 import com.booktheticket.theatrems.exceptionhandling.ScreenNotFoundException;
 import com.booktheticket.theatrems.exceptionhandling.ShowNotFoundException;
 import com.booktheticket.theatrems.exceptionhandling.ShowTimeNotFoundException;
+import com.booktheticket.theatrems.exceptionhandling.ShowTimeValidationException;
 import com.booktheticket.theatrems.exceptionhandling.TheatreNotFoundException;
 import com.booktheticket.theatrems.repository.ScreenRepo;
 import com.booktheticket.theatrems.repository.ShowRepo;
@@ -56,9 +58,12 @@ public class ShowTimeServiceV1 {
 	Function<ShowTimeInDto, ShowTimings> convertShowTimeInDtoToEntity = dto -> mapper.map(dto, ShowTimings.class);
 
 	public ApiStatus addShowTime(int theatreId, int screenId, int showId, ShowTimeInDto showTime)
-			throws TheatreNotFoundException, ScreenNotFoundException, ShowNotFoundException {
+			throws TheatreNotFoundException, ScreenNotFoundException, ShowNotFoundException, ShowTimeValidationException {
 
 		if (validateShowDetails(theatreId, screenId, showId)) {
+			
+			
+			
 			ShowTimings sTime = convertShowTimeInDtoToEntity.apply(showTime);
 			sTime.setShow(showRepo.findById(showId).get());
 			sTime.setLastUpdatedTimestamp(LocalDateTime.now());
@@ -71,7 +76,13 @@ public class ShowTimeServiceV1 {
 		   LocalTime time  = LocalTime.of(Integer.parseInt(timedetails[0]),Integer.parseInt(timedetails[1]));
 		   sTime.setShowTime(time);
 		   sTime.setDate(of);
-		   
+
+		   List<ShowTimings> findByShow = repo.findByShow(showRepo.findById(screenId).get());
+			
+			boolean anyMatch = findByShow.stream().anyMatch(e->e.getDate().isEqual(of)&&e.getShowTime().equals(time));
+			if(anyMatch) {
+				throw new ShowTimeValidationException("Already shows available for this date and time.");
+			}
 		   
 			repo.save(sTime);
 			status.setStatus(200);
@@ -134,4 +145,8 @@ public class ShowTimeServiceV1 {
 		return true;
 
 	}
+	
+	
+	
+	
 }

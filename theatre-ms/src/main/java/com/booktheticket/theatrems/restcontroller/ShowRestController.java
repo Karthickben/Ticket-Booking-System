@@ -23,6 +23,7 @@ import com.booktheticket.theatrems.doamin.modal.ApiStatus;
 import com.booktheticket.theatrems.doamin.modal.ScreenSeatingDetailsOut;
 import com.booktheticket.theatrems.doamin.modal.ShowInDto;
 import com.booktheticket.theatrems.exceptionhandling.MovieNotFoundException;
+import com.booktheticket.theatrems.exceptionhandling.ScheduledShowsFoundException;
 import com.booktheticket.theatrems.exceptionhandling.ScreenNotFoundException;
 import com.booktheticket.theatrems.exceptionhandling.ShowNotFoundException;
 import com.booktheticket.theatrems.exceptionhandling.ShowValidationException;
@@ -46,7 +47,7 @@ public class ShowRestController {
 	@PostMapping("/{theareId}/screen/{screenId}/show")
 	public ApiStatus addNewShow(@PathVariable("theareId") int theareId, @PathVariable("screenId") int screenId,
 			@Valid @RequestBody ShowInDto show, BindingResult results)
-			throws TheatreNotFoundException, ScreenNotFoundException, MovieNotFoundException, ShowValidationException {
+			throws TheatreNotFoundException, ScreenNotFoundException, MovieNotFoundException, ShowValidationException, ScheduledShowsFoundException {
 
 		if (results.hasErrors()) {
 			throw showValidationException.apply(getValidationErrorMessage.apply(results));

@@ -199,7 +199,7 @@ public class TheatreServiceV1 {
 			
 			if(!listOfShows.isEmpty()) {
 				
-				show = listOfShows.stream().max(Comparator.comparing(Show::getEffectiveDate)).get();
+				show = listOfShows.stream().max(Comparator.comparing(Show::getLastUpdatedTimestamp)).get();
 				String movieuri = "http://MOVIEMS/movie-ms/v1/movie/id/" + show.getMovieId() + "/getdetails";
 				ResponseEntity<MovieDetailsDto> movie = client.getForEntity(movieuri, MovieDetailsDto.class);
 				MovieDetailsDto movieDetails = movie.getBody();

@@ -2,6 +2,7 @@ package com.booktheticket.theatrems.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -15,15 +16,18 @@ import org.springframework.web.client.RestTemplate;
 
 import com.booktheticket.theatrems.doamin.entity.Screen;
 import com.booktheticket.theatrems.doamin.entity.Show;
+import com.booktheticket.theatrems.doamin.entity.ShowTimings;
 import com.booktheticket.theatrems.doamin.modal.ApiStatus;
 import com.booktheticket.theatrems.doamin.modal.MovieDetailsDto;
 import com.booktheticket.theatrems.doamin.modal.ShowInDto;
 import com.booktheticket.theatrems.exceptionhandling.MovieNotFoundException;
+import com.booktheticket.theatrems.exceptionhandling.ScheduledShowsFoundException;
 import com.booktheticket.theatrems.exceptionhandling.ScreenNotFoundException;
 import com.booktheticket.theatrems.exceptionhandling.ShowNotFoundException;
 import com.booktheticket.theatrems.exceptionhandling.TheatreNotFoundException;
 import com.booktheticket.theatrems.repository.ScreenRepo;
 import com.booktheticket.theatrems.repository.ShowRepo;
+import com.booktheticket.theatrems.repository.ShowTimingRepo;
 import com.booktheticket.theatrems.repository.TheatreRepo;
 
 @Service
@@ -37,6 +41,9 @@ public class ShowServiceV1 {
 	private ScreenRepo sRepo;
 	@Autowired
 	private ModelMapper mapper;
+	
+	@Autowired
+	private ShowTimingRepo showRepo;
 
 	@Autowired
 	private RestTemplate client;
@@ -51,9 +58,33 @@ public class ShowServiceV1 {
 	private Supplier<ShowNotFoundException> showNotFound = () -> new ShowNotFoundException("Show not found.");
 
 	public ApiStatus addShow(int theareId, int screenId, ShowInDto show)
-			throws TheatreNotFoundException, ScreenNotFoundException, MovieNotFoundException {
+			throws TheatreNotFoundException, ScreenNotFoundException, MovieNotFoundException, ScheduledShowsFoundException {
+		
+		
 
 		if (validateShowDetials(theareId, screenId, show)) {
+			
+			List<Show> findByScreen = repo.findByScreen(sRepo.findById(screenId).get());
+			if(!findByScreen.isEmpty()) {
+				for(Show sh:findByScreen) {
+					if(sh.getScreen().getScreenId()==screenId) {
+						List<ShowTimings> findByShow = showRepo.findByShow(sh);
+						if(!findByShow.isEmpty()) {
+							for(ShowTimings sts: findByShow) {
+								if(sts.getDate().isAfter(LocalDate.now().minusDays(1))) {
+									throw new ScheduledShowsFoundException("Scheduled Shows are available for this"
+											+ " screen.");
+									
+								}
+							}
+							
+						}
+					}
+					
+				}
+				
+			}
+			
 			Optional<Screen> screen = sRepo.findById(screenId);
 			Show showDetails = convertShowInDtoToEntity.apply(show);
 			showDetails.setLastUpdatedTimestamp(LocalDateTime.now());

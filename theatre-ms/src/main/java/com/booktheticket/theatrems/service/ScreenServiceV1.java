@@ -86,7 +86,7 @@ public class ScreenServiceV1 {
 					if(!findByShow.isEmpty()) {
 						for(ShowTimings sts: findByShow) {
 							if(sts.getDate().isAfter(LocalDate.now().minusDays(1))) {
-								throw new ScheduledShowsFoundException("Scheduled Shows are availble for this"
+								throw new ScheduledShowsFoundException("Scheduled Shows are available for this "
 										+ "screen.");
 								
 							}
@@ -127,8 +127,8 @@ public class ScreenServiceV1 {
 					if(!findByShow.isEmpty()) {
 						for(ShowTimings sts: findByShow) {
 							if(sts.getDate().isAfter(LocalDate.now().minusDays(1))) {
-								throw new ScheduledShowsFoundException("Scheduled Shows are availble for this"
-										+ "screen.");
+								throw new ScheduledShowsFoundException("Scheduled Shows are available for this"
+										+ " screen.");
 								
 							}
 						}
