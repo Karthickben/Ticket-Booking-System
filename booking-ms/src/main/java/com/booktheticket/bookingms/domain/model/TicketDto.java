@@ -94,6 +94,16 @@ public class TicketDto {
 	public void setBookingId(int bookingId) {
 		this.bookingId = bookingId;
 	}
+	@Override
+	public String toString() {
+		return "TicketDto [userEmailId=" + userEmailId + ", theatreName=" + theatreName + ", screenName=" + screenName
+				+ ", bookingId=" + bookingId + ", movieName=" + movieName + ", theatrAddress=" + theatrAddress
+				+ ", showDate=" + showDate + ", showTime=" + showTime + ", ticketPrice=" + ticketPrice
+				+ ", seatNumbers=" + seatNumbers + ", totalSeatsBoooked=" + totalSeatsBoooked + ", totalPrice="
+				+ totalPrice + ", status=" + status + "]";
+	}
+	
+	
 	
 	
 	

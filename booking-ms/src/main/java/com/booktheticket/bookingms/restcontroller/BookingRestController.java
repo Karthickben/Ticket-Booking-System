@@ -60,6 +60,7 @@ public class BookingRestController {
 	@GetMapping("/screen/{screenId}/showTime/{showTimeId}/genseatingchart")
 	public SeatingChartOutDto getSeatingChart(@PathVariable("screenId") int screenId,
 			@PathVariable("showTimeId") int showTimeId) throws ScreenNotFound {
+		System.out.println("Inside Gen Seating chart1");
 		return service.getSeatingChart(screenId, showTimeId);
 
 	}
@@ -82,6 +83,7 @@ public class BookingRestController {
 	@GetMapping("/report/user/{user}/genreport")
 	public BookingReportDto genReportsForTheGivenUser(@PathVariable("user") String user )
 			throws BookingNotFound, ScreenNotFound, TheatreNotFound {
+		System.out.println("inside Booking by user Controller");
 		
 		return service.genReportsByUser(user);
 		

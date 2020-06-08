@@ -196,19 +196,29 @@ public class TheatreServiceV1 {
 			ScreenOutDto screenOutDeatils = convertToScreenFullDetailsDto.apply(s);
 
 			List<Show> listOfShows = showRepo.findByScreen(s);
+			
+			if(!listOfShows.isEmpty()) {
+				
+				show = listOfShows.stream().max(Comparator.comparing(Show::getEffectiveDate)).get();
+				String movieuri = "http://MOVIEMS/movie-ms/v1/movie/id/" + show.getMovieId() + "/getdetails";
+				ResponseEntity<MovieDetailsDto> movie = client.getForEntity(movieuri, MovieDetailsDto.class);
+				MovieDetailsDto movieDetails = movie.getBody();
+				screenOutDeatils.setRunningMovie(movieDetails.getMovieName());
+				screenOutDeatils.setMovieId(movieDetails.getMovieId());
+				screenOutDeatils.setShowId(show.getShowId());
+				List<ShowTimeOutDto> showTimeList = stRepo.findByShow(show).stream().map(convertToShowTimingsFullDetailsDto)
+						.collect(Collectors.toList());
+				screenOutDeatils.getUpcomingShows().addAll(showTimeList);
 
-			show = listOfShows.stream().max(Comparator.comparing(Show::getEffectiveDate)).get();
-			String movieuri = "http://MOVIEMS/movie-ms/v1/movie/id/" + show.getMovieId() + "/getdetails";
-			ResponseEntity<MovieDetailsDto> movie = client.getForEntity(movieuri, MovieDetailsDto.class);
-			MovieDetailsDto movieDetails = movie.getBody();
-			screenOutDeatils.setRunningMovie(movieDetails.getMovieName());
-			screenOutDeatils.setMovieId(movieDetails.getMovieId());
-			screenOutDeatils.setShowId(show.getShowId());
-			List<ShowTimeOutDto> showTimeList = stRepo.findByShow(show).stream().map(convertToShowTimingsFullDetailsDto)
-					.collect(Collectors.toList());
-			screenOutDeatils.getUpcomingShows().addAll(showTimeList);
+				theatreDetails.getScreens().add(screenOutDeatils);
+				
+			}else {
+				theatreDetails.getScreens().add(screenOutDeatils);
+				
+			}
 
-			theatreDetails.getScreens().add(screenOutDeatils);
+			
+			
 
 		}
 

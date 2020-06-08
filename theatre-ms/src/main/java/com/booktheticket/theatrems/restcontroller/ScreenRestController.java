@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.booktheticket.theatrems.doamin.modal.ApiStatus;
 import com.booktheticket.theatrems.doamin.modal.ScreenInDto;
 import com.booktheticket.theatrems.doamin.modal.ScreenSeatingDetailsOut;
+import com.booktheticket.theatrems.exceptionhandling.ScheduledShowsFoundException;
 import com.booktheticket.theatrems.exceptionhandling.ScreenNotFoundException;
 import com.booktheticket.theatrems.exceptionhandling.ScreenValidationException;
 import com.booktheticket.theatrems.exceptionhandling.ShowsFoundException;
@@ -57,7 +58,7 @@ public class ScreenRestController {
 	public ApiStatus updateScreenDetails(@PathVariable("screenId") int screenId,
 			@PathVariable("theatreId") int theatreId, @Valid @RequestBody ScreenInDto screen,
 			BindingResult beanValidationResults)
-			throws TheatreNotFoundException, ScreenNotFoundException, ScreenValidationException {
+			throws TheatreNotFoundException, ScreenNotFoundException, ScreenValidationException, ScheduledShowsFoundException {
 
 		if (beanValidationResults.hasErrors()) {
 			throw screenValidationException.apply(getValidationErrorMessage.apply(beanValidationResults));
@@ -68,7 +69,7 @@ public class ScreenRestController {
 
 	@DeleteMapping(path = "/{theatreId}/screen/{screenId}/delete")
 	public ApiStatus deleteScreenDetails(@PathVariable("screenId") int screenId,
-			@PathVariable("theatreId") int theatreId) throws TheatreNotFoundException, ScreenNotFoundException {
+			@PathVariable("theatreId") int theatreId) throws TheatreNotFoundException, ScreenNotFoundException, ShowsFoundException, ScheduledShowsFoundException {
 		return service.deleteSCreen(screenId, theatreId);
 	}
 

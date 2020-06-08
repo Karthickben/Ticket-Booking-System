@@ -90,6 +90,7 @@ public class BookingService1 {
 
 	public SeatingChartOutDto getSeatingChart(int screenId, int showTimeId) throws ScreenNotFound {
 
+		System.out.println("Inside Gen Seating chart2");
 		ResponseEntity<ScreenSeatingDetailsOut> seatingDetails = getScreenDetails(screenId);
 
 		List<Booking> st = repo.findByShowTimeId(showTimeId);
@@ -164,11 +165,13 @@ public class BookingService1 {
 	}
 
 	private ResponseEntity<ScreenSeatingDetailsOut> getScreenDetails(int screenId) throws ScreenNotFound {
+		System.out.println("Inside Gen Seating chart3");
 
 		String url = "http://TheatreMs/theatre-ms/v1/theatre-screen/screen/" + screenId + "/getSeatDetails";
 		ResponseEntity<ScreenSeatingDetailsOut> seatingDetails = client.getForEntity(url,
 				ScreenSeatingDetailsOut.class);
 
+		System.out.println("Inside Gen Seating chart4");
 		HttpStatus statusCode = seatingDetails.getStatusCode();
 
 		System.out.println("StatusCode: " + statusCode);
@@ -221,8 +224,10 @@ public class BookingService1 {
 	public BookingReportDto genReportsByUser(String user)
 			throws BookingNotFound, ScreenNotFound, TheatreNotFound {
 		
-
+		System.out.println("inside Booking by user service");
+		
 		List<Booking> listOfBooking = repo.findByUserId(user);
+		System.out.println(listOfBooking);
 
 		List<TicketDto> listOfBookingDetails = new ArrayList<>();
 
@@ -230,6 +235,8 @@ public class BookingService1 {
 			TicketDto genTicket = genTicket(book.getBookingId());
 				listOfBookingDetails.add(genTicket);	
 		}
+		
+		System.out.println(listOfBookingDetails);
 
 		BookingReportDto report = new BookingReportDto();
 		report.setListOfBookingDetails(listOfBookingDetails);
