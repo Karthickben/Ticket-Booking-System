@@ -12,6 +12,10 @@ public interface MovieRepo extends JpaRepository<Movie, Integer>{
 
 	List<Movie> findAllByMovieName(String movieName);
 
+	List<Movie> findByMovieNameAndLanguage(String movieName, String language);
+
+	
+
 	
 
 }

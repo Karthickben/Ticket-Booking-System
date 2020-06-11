@@ -62,7 +62,7 @@ public class ShowTimeServiceV1 {
 
 		if (validateShowDetails(theatreId, screenId, showId)) {
 			
-			
+			System.out.println(theatreId+" "+screenId+" "+showId);
 			
 			ShowTimings sTime = convertShowTimeInDtoToEntity.apply(showTime);
 			sTime.setShow(showRepo.findById(showId).get());
@@ -77,12 +77,18 @@ public class ShowTimeServiceV1 {
 		   sTime.setShowTime(time);
 		   sTime.setDate(of);
 
-		   List<ShowTimings> findByShow = repo.findByShow(showRepo.findById(screenId).get());
+		   List<ShowTimings> findByShow = repo.findByShow(showRepo.findById(showId).get());
+		   
+		   if(!findByShow.isEmpty()) {
+			   
+				boolean anyMatch = findByShow.stream().anyMatch(e->e.getDate().isEqual(of)&&e.getShowTime().equals(time));
+				if(anyMatch) {
+					throw new ShowTimeValidationException("Already shows available for this date and time.");
+				}
+			   
+		   }
 			
-			boolean anyMatch = findByShow.stream().anyMatch(e->e.getDate().isEqual(of)&&e.getShowTime().equals(time));
-			if(anyMatch) {
-				throw new ShowTimeValidationException("Already shows available for this date and time.");
-			}
+		
 		   
 			repo.save(sTime);
 			status.setStatus(200);

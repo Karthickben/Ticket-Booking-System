@@ -85,7 +85,7 @@ public class TheatreRestController {
 
 	@GetMapping("/movie/{moviename}/location/{location}/getdetails")
 	public TheatreByMovieOutListDto getTheatresListByNameLocation(@PathVariable("moviename") String movieName,
-			@PathVariable("location") String city) throws MovieNotFoundException {
+			@PathVariable("location") String city) throws MovieNotFoundException, TheatreNotFoundException {
 		return service.getTheatresByNameLocation(movieName, city);
 	}
 	

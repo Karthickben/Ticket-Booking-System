@@ -71,13 +71,13 @@ public class BookingRestController {
 		return service.genTicket(bookingId);
 	}
 	
-	@GetMapping("/report/{location}/{fromDate}/{toDate}/genreport")
-	public BookingReportDto genReports(@PathVariable("location") String location, @PathVariable("fromDate") String fromDate, 
+	@GetMapping("/reports/{fromDate}/{toDate}/genreport")
+	public BookingReportDto genReports(@PathVariable("fromDate") String fromDate, 
 			@PathVariable("toDate") String toDate)
 	
 			throws BookingNotFound, ScreenNotFound, TheatreNotFound {
 		
-		return service.genReports(location, fromDate, toDate);
+		return service.genReports(fromDate, toDate);
 	}
 	
 	@GetMapping("/report/user/{user}/genreport")

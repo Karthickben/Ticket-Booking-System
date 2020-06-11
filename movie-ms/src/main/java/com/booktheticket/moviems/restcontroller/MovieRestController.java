@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,6 +25,7 @@ import com.booktheticket.moviems.domain.model.MovieListDto;
 import com.booktheticket.moviems.domain.model.MovieRateDto;
 import com.booktheticket.moviems.exceptionhandling.BeanValidationException;
 import com.booktheticket.moviems.exceptionhandling.MovieNotFoundException;
+import com.booktheticket.moviems.exceptionhandling.MovieWithSameNameLanguageFoundException;
 import com.booktheticket.moviems.service.MovieService;
 
 @RestController
@@ -41,7 +41,7 @@ public class MovieRestController {
 
 	@PostMapping
 	public ApiStatus createNewMovie(@Valid @RequestBody MovieInboundDto movie, BindingResult beanValidationResults)
-			throws BeanValidationException {
+			throws BeanValidationException, MovieWithSameNameLanguageFoundException {
 
 		if (beanValidationResults.hasErrors()) {
 
@@ -68,7 +68,7 @@ public class MovieRestController {
 
 	@PutMapping("/{movieId}")
 	public ApiStatus updateMovieDetails(@PathVariable("movieId") int movieId, @Valid @RequestBody MovieInboundDto movie,
-			BindingResult beanValidationResults) throws BeanValidationException, MovieNotFoundException {
+			BindingResult beanValidationResults) throws BeanValidationException, MovieNotFoundException, MovieWithSameNameLanguageFoundException {
 		if (beanValidationResults.hasErrors()) {
 
 			throw new BeanValidationException(getValdaitionErrorMessage.apply(beanValidationResults));
@@ -84,7 +84,7 @@ public class MovieRestController {
 	}
 
 	@DeleteMapping("/{movieId}")
-	public ApiStatus deleteMovie(@PathVariable("movieId")int movieId) throws MovieNotFoundException {
+	public ApiStatus deleteMovie(@PathVariable("movieId")int movieId) throws MovieNotFoundException, MovieWithSameNameLanguageFoundException {
 		return service.deleteMovie(movieId);
 
 	}

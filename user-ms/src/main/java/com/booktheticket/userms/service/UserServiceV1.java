@@ -2,6 +2,7 @@ package com.booktheticket.userms.service;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -46,8 +47,14 @@ public class UserServiceV1 implements UserService {
 		System.out.println("--------------------------------------------------");
 		
 		if(checkUser.isPresent()) {
-			throw new UserAlreadyExistException("User with Id "+userDetails.getEmailId()+" is alreay exsists.");
+			throw new UserAlreadyExistException(userDetails.getEmailId()+" is alreay exsists.");
 		}
+		
+		List<User> userList= repo.findByPhoneNumber(userDetails.getPhoneNumber());
+		if(!userList.isEmpty()) {
+			throw new UserAlreadyExistException( userDetails.getPhoneNumber()+" alreay exsists.");
+		}
+			
 		User user = convertToEntity.apply(userDetails);
 		user.setRole("user");
 		user.setLastUpdatedTimestamp(LocalDateTime.now());	

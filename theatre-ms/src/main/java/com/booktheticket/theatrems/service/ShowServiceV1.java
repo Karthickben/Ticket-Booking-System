@@ -159,4 +159,20 @@ public class ShowServiceV1 {
 
 	}
 
+	
+	public boolean isMovieIsAvailble(int movieId) {
+		System.out.println(movieId);
+	
+		List<Show> findByMovieId = repo.findByMovieId(movieId);
+		
+		System.out.println(findByMovieId);
+		
+		if(findByMovieId.isEmpty()) {
+			return true;
+		}
+		
+		return false;
+	}
 }
+
+

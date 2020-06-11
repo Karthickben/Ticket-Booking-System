@@ -1,6 +1,7 @@
 package com.booktheticket.theatrems.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -146,13 +147,15 @@ public class TheatreServiceV1 {
 	}
 
 	public TheatreByMovieOutListDto getTheatresByNameLocation(String movieName, String city)
-			throws MovieNotFoundException {
+			throws MovieNotFoundException, TheatreNotFoundException {
 		System.out.println(movieName + " " + city);
 		String movieuri = "http://MOVIEMS/movie-ms/v1/movie/name/" + movieName + "/getdetails";
 
 		ResponseEntity<MovieListDto> movies = client.getForEntity(movieuri, MovieListDto.class);
 		List<MovieDetailsDto> movieList = movies.getBody().getListOfMovies();
 		TheatreByMovieOutListDto tlist = new TheatreByMovieOutListDto();
+		
+		List<Integer> screenShow = new ArrayList<>();
 		
 		if (movieList.isEmpty()) {
 			throw new MovieNotFoundException("Movie not found");
@@ -164,14 +167,35 @@ public class TheatreServiceV1 {
 			for (Show s : listOfShowsByMovie) {
 				Optional<Screen> screen = sRepo.findById(s.getScreen().getScreenId());
 				Optional<Theatre> theatre = repo.findById(screen.get().getTheatre().getTheatreId());
-
-				if (theatre.get().getCity().equalsIgnoreCase(city)) {
-					TheatreByMovieOutDto details = mapper.map(theatre.get(), TheatreByMovieOutDto.class);
-					details.setScreenId(screen.get().getScreenId());
-					details.setScreenName(screen.get().getScreenName());
-					details.setMovieId(movieDetails.getMovieId());
-					details.setMovieName(movieDetails.getMovieName());
-					tlist.getListOfTheatre().add(details);
+				List<Show> findByScreen = showRepo.findByScreen(screen.get());
+				
+				Optional<Show> max = findByScreen.stream().max(Comparator.comparing(Show::getLastUpdatedTimestamp));
+				
+				if(!max.isPresent()) {
+					throw theatreNotFound.get();
+					
+				}
+				
+				
+			
+				if (theatre.get().getCity().equalsIgnoreCase(city)&&
+						movieDetails.getMovieId()==max.get().getMovieId()) {
+					
+					Optional<Integer> findAny = screenShow.stream().filter(i->i==screen.get().getScreenId()).findAny();
+					
+					if(!findAny.isPresent()) {
+						
+						screenShow.add( screen.get().getScreenId());
+						TheatreByMovieOutDto details = mapper.map(theatre.get(), TheatreByMovieOutDto.class);
+						details.setScreenId(screen.get().getScreenId());
+						details.setScreenName(screen.get().getScreenName());
+						details.setMovieId(movieDetails.getMovieId());
+						details.setMovieName(movieDetails.getMovieName());
+						tlist.getListOfTheatre().add(details);
+						
+						
+					}
+					
 				}
 
 			}

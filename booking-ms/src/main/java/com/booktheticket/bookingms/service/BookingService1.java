@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -194,7 +195,7 @@ public class BookingService1 {
 
 	}
 
-	public BookingReportDto genReports(String location, String fromDate, String toDate)
+	public BookingReportDto genReports(String fromDate, String toDate)
 			throws BookingNotFound, ScreenNotFound, TheatreNotFound {
 		
 		String[] from = fromDate.split("-");
@@ -211,9 +212,8 @@ public class BookingService1 {
 
 		for (Booking book : listOfBooking) {
 			TicketDto genTicket = genTicket(book.getBookingId());
-			if(genTicket.getTheatrAddress().equalsIgnoreCase(location)) {
+			
 				listOfBookingDetails.add(genTicket);
-			}
 		}
 
 		BookingReportDto report = new BookingReportDto();
@@ -227,17 +227,20 @@ public class BookingService1 {
 		System.out.println("inside Booking by user service");
 		
 		List<Booking> listOfBooking = repo.findByUserId(user);
-		System.out.println(listOfBooking);
-
 		List<TicketDto> listOfBookingDetails = new ArrayList<>();
-
-		for (Booking book : listOfBooking) {
-			TicketDto genTicket = genTicket(book.getBookingId());
-				listOfBookingDetails.add(genTicket);	
+	
+		if(!listOfBooking.isEmpty()) {
+			List<Booking> collect = listOfBooking.stream().sorted(Comparator.comparing(Booking::getLastUpdatedTimestamp).
+					reversed()).collect(Collectors.toList());
+			
+			for (Booking book : collect) {
+				TicketDto genTicket = genTicket(book.getBookingId());
+					listOfBookingDetails.add(genTicket);	
+			}
+		
+			
 		}
 		
-		System.out.println(listOfBookingDetails);
-
 		BookingReportDto report = new BookingReportDto();
 		report.setListOfBookingDetails(listOfBookingDetails);
 		return report;

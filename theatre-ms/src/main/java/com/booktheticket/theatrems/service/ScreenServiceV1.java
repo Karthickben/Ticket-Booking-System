@@ -20,6 +20,7 @@ import com.booktheticket.theatrems.doamin.modal.ScreenInDto;
 import com.booktheticket.theatrems.doamin.modal.ScreenSeatingDetailsOut;
 import com.booktheticket.theatrems.exceptionhandling.ScheduledShowsFoundException;
 import com.booktheticket.theatrems.exceptionhandling.ScreenNotFoundException;
+import com.booktheticket.theatrems.exceptionhandling.ScreenValidationException;
 import com.booktheticket.theatrems.exceptionhandling.ShowsFoundException;
 import com.booktheticket.theatrems.exceptionhandling.TheatreNotFoundException;
 import com.booktheticket.theatrems.repository.ScreenRepo;
@@ -56,12 +57,20 @@ public class ScreenServiceV1 {
 
 	private Supplier<ScreenNotFoundException> screenNotFound = () -> new ScreenNotFoundException("Screen not found.");
 
-	public ApiStatus addScreen(ScreenInDto screen, int theatreId) throws TheatreNotFoundException {
+	public ApiStatus addScreen(ScreenInDto screen, int theatreId) throws TheatreNotFoundException, ScreenValidationException {
 		Optional<Theatre> theatre = tRepo.findById(theatreId);
 		if(!theatre.isPresent()) {
 			throw theatreNotFound.get();
 		}
-
+		
+		
+		List<Screen> findByTheatre = repo.findByTheatre(theatre.get());
+		
+		if(findByTheatre.size()>=theatre.get().getTotalScreens()) {
+			throw new ScreenValidationException("Screen cannot be added, please check "
+					+ "the screen count.");
+		}
+		
 		Screen screen1 = convertScreenInDtoToentity.apply(screen);
 		screen1.setLastUpdatedTimestamp(currentTimeStamp.get());
 		screen1.setTheatre(theatre.get());
