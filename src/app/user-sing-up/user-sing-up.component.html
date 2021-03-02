@@ -1,0 +1,46 @@
+<h1>Sign Up</h1>
+<form (ngSubmit)="onSubmit()" #f="ngForm" novalidate>
+  <div ngModelGroup="userData">
+    <label for="userName">User Name</label>
+    <br />
+    <input
+      type="email"
+      id="1"
+      placeholder="Email or PhoneNumber"
+      ngModel
+      name="email"
+      required
+      email
+      #email="ngModel"
+    />
+    <br />
+    <span style="color: crimson" *ngIf="!email.valid && email.touched"
+      >***Enter a valid email Id</span
+    >
+    <br />
+    <label for="gender">Gender</label> <br />
+    <input type="radio" name="gender" id="2" value="male" ngModel /> Male <br />
+    <input type="radio" name="gender" id="3" value="female" ngModel /> Female
+    <br />
+    <input type="radio" name="gender" id="4" value="none" ngModel /> Pefer Not
+    to Say
+    <br />
+  </div>
+
+  <br />
+  <label for="password">Password</label>
+  <br />
+  <input type="password" name="password" id="5" ngModel />
+  <br />
+  <label for="password2">Retype Password</label>
+  <br />
+  <input type="password2" name="password2" id="6" ngModel />
+  <br />
+  <button
+    type="submit"
+    [disabled]="!f.valid"
+    [ngStyle]="{ backgroundColor: f.valid ? '' : 'grey' }"
+  >
+    Sign Up
+  </button>
+</form>

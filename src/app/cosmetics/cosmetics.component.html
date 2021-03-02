@@ -1,0 +1,9 @@
+<div class="mainCosmetics">
+  <div style="width: 60%">
+    <app-cosmetic-list (cosmeticClicked)="wasCosmeticCliked($event)">
+    </app-cosmetic-list>
+  </div>
+  <div style="width: 40%">
+    <app-cosmetic-details [InputCosmetic]="item"></app-cosmetic-details>
+  </div>
+</div>

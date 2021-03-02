@@ -1,0 +1,43 @@
+<div
+  style="
+    background-color: white;
+    border: solid 1px black;
+    width: 80%;
+    min-height: 80%;
+    margin: 0 auto;
+    margin-top: 10%;
+  "
+>
+  <div *ngIf="cosmeticItem !== null">
+    <h1>
+      {{ cosmeticItem.name | uppercase }}
+      <button style="color: mediumvioletred; font-weight: bolder">
+        Add to Cart
+      </button>
+    </h1>
+    <div style="object-fit: contain; height: 60%">
+      <img src="{{ cosmeticItem.imagePath }}" alt="" width="70%" />
+    </div>
+
+    <h3>
+      {{ cosmeticItem.color }}
+    </h3>
+    <h3>
+      <span style="color: maroon"> &#8377;{{ cosmeticItem.price }}</span>
+    </h3>
+    <button
+      style="
+        background-color: royalblue;
+        outline: none;
+        border: none;
+        width: 20%;
+        height: 30px;
+      "
+      (click)="addToCart()"
+    >
+      Buy
+    </button>
+  </div>
+</div>
+
+<!-- public name: string, public color: string, public imagePath: string, -->

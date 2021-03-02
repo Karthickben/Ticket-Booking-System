@@ -1,0 +1,45 @@
+label {
+  font-size: x-large;
+  color: indianred;
+  font-weight: bolder;
+  margin: 10px;
+}
+
+input {
+  margin: 10px;
+  height: 30px;
+  width: 300px;
+}
+
+button {
+  margin: 10px;
+  height: 30px;
+  width: 300px;
+  background-color: indianred;
+  color: white;
+  font-size: larger;
+  font-weight: bolder;
+}
+
+input[type="radio"] {
+  width: 40px;
+}
+
+h1 {
+  text-align: center;
+  color: indianred;
+  font-weight: bolder;
+  text-decoration: underline;
+  margin: 20px;
+}
+
+form {
+  margin-left: 550px;
+  border: solid 1px indianred;
+  width: fit-content;
+  box-shadow: 2px 2px gray;
+}
+
+input.ng-invalid.ng-touched {
+  border: 1px solid red;
+}

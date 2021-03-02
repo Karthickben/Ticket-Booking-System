@@ -1,0 +1,26 @@
+<h1>Log In</h1>
+<form novalidate [formGroup]="signInForm" (ngSubmit)="onSubmit()">
+  <label for="userName">{{ "User Name" }}</label>
+  <br />
+  <input
+    type="email"
+    id="1"
+    placeholder="Email or PhoneNumber"
+    formControlName="userName"
+  />
+  <span
+    *ngIf="
+      !signInForm.get('userName').valid && signInForm.get('userName').touched
+    "
+  >
+    Please enter the valid Input
+  </span>
+  <br />
+
+  <br />
+  <label for="password">Password</label>
+  <br />
+  <input type="password" name="password" id="5" formControlName="password" />
+  <br />
+  <button type="submit">Sign In</button>
+</form>
